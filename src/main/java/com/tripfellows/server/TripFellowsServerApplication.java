@@ -10,6 +10,7 @@ public class TripFellowsServerApplication {
 		SpringApplication.run(TripFellowsServerApplication.class, args);
 
 		System.out.println("x");
+		System.out.println("y");
 	}
 
 }
