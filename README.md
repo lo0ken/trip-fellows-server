@@ -38,7 +38,7 @@ Order Service: GET /api/order endpoint
   - Ввести корректное сообщение к коммиту, к примеру MainActivity: hello word message
   - Commit
 - делаем `push` из терминала
-  - git push origin task-1
+  - `git push origin task-1`
 - Переходим по ссылке для создания пулл реквеста
   - в Reviewers выбираем всех участников
   - в Assigne ставим того тко будет мерджить
