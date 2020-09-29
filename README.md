@@ -47,4 +47,4 @@ Order Service: GET /api/order endpoint
 ## Команда
 * Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
 * Даниил Чернов - [GitHub](https://github.com/Lackier)
-* Даннил Кучеренко - [GitHub](https://github.com/Danil-dn)
+* Данил Кучеренко - [GitHub](https://github.com/Danil-dn)
