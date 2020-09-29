@@ -1,4 +1,15 @@
-# trip-fellows-server
+# Trip Fellows Server
+## Описание
+Бэкенд для Android - приложения <b>Trip Fellows<b> ([GitHub](https://github.com/lo0ken/trip-fellows-client))
+  
+Реализовывает REST API
+  
+## Используемые технологии
+* Java
+* Spring (Spring Boot, Spring Data)
+* Hibernate
+* Flyway
+* Postgres
 
 ## Регламент работы с гитом
 Ветка `master` - релизная, в <b>неё не коммитим и не пушим ничего!</b> В неё будем сливать изменения вместе!
@@ -11,9 +22,9 @@ task-{№ задачи}
 Например: task-1
 
 #### Наименование коммитов
-{MODULE_NAME}: description
+{Module Name}: description
 Например:
-ORDER SERVICE: GET /api/order endpoint
+Order Service: GET /api/order endpoint
 
 ### Алгоритм выполнения задачи
 - Взяли задачу из трелло, к примеру под наименованием task-1
