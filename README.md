@@ -43,3 +43,8 @@ Order Service: GET /api/order endpoint
   - в Reviewers выбираем всех участников
   - в Assigne ставим того тко будет мерджить
   - Отправляем ссылку на пулл-реквест в общий чат
+  
+## Команда
+* Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
+* Даниил Чернов - [GitHub](https://github.com/Lackier)
+* Даннил Кучеренко - [GitHub](https://github.com/Danil-dn)
