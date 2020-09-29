@@ -30,7 +30,7 @@ Order Service: GET /api/order endpoint
 - Взяли задачу из трелло, к примеру под наименованием task-1
 - Создали ветку от актуальной `dev`
   - `git checkout dev`
-  - `git pull`
+  - `git pull origin dev`
   - `git checkout -b task-1`
 - Внесли изменения, проверили что нету лишних строк
 - Делаем коммит
