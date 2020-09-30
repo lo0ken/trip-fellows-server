@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "account")
@@ -16,9 +17,12 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 500)
+    @Column(name = "name", length = 500)
     private String name;
 
-    @Column(name = "name", nullable = false, length = 500)
+    @Column(name = "phone_number", length = 500)
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private Set<TripAccountEntity> accountToTrips;
 }
