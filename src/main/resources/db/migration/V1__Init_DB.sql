@@ -18,10 +18,10 @@ create table trip_status (
 );
 
 insert into trip_status (id, code, name)
-values (default,'WAITING','Ожидание'),
-       (default,'CANCELED','Отменена'),
-       (default,'STARTED','Начата'),
-       (default,'FINISHED','Завершена');
+values (default, 'WAITING', 'Ожидание'),
+       (default, 'CANCELED', 'Отменена'),
+       (default, 'STARTED', 'Начата'),
+       (default, 'FINISHED', 'Завершена');
 
 create table role (
   id serial not null primary key,
@@ -30,8 +30,8 @@ create table role (
 );
 
 insert into role (id, code, name)
-values (default,'DRIVER','Водитель'),
-       (default,'PASSENGER','Пассажир');
+values (default, 'DRIVER', 'Водитель'),
+       (default, 'PASSENGER', 'Пассажир');
 
 create table trip (
   id serial not null primary key,
