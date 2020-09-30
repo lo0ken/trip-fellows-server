@@ -38,9 +38,9 @@ create table trip (
   start_point_id integer not null,
   end_point_id integer not null,
   price numeric,
-  create_dt date not null,
-  start_dt date not null,
-  end_dt date not null,
+  create_dt timestamp not null,
+  start_dt timestamp not null,
+  end_dt timestamp not null,
   comment varchar(500),
   status_id integer not null,
   places_count integer
