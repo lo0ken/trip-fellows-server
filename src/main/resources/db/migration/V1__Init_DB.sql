@@ -32,3 +32,20 @@ create table role (
 insert into role (id, code, name)
 values (default,'DRIVER','Водитель'),
        (default,'PASSENGER','Пассажир');
+
+create table trip (
+  id serial not null primary key,
+  start_point_id integer not null,
+  end_point_id integer not null,
+  price numeric,
+  create_dt date not null,
+  start_dt date not null,
+  end_dt date not null,
+  comment varchar(500),
+  status_id integer not null,
+  places_count integer
+);
+
+alter table trip add constraint fk_trip_start_point foreign key (start_point_id) references point(id);
+alter table trip add constraint fk_trip_end_point foreign key (end_point_id) references point(id);
+alter table trip add constraint fk_trip_status foreign key (status_id) references trip_status(id);
