@@ -30,7 +30,7 @@ Order Service: GET /api/order endpoint
 - Взяли задачу из трелло, к примеру под наименованием task-1
 - Создали ветку от актуальной `dev`
   - `git checkout dev`
-  - `git pull`
+  - `git pull origin dev`
   - `git checkout -b task-1`
 - Внесли изменения, проверили что нету лишних строк
 - Делаем коммит
@@ -38,7 +38,7 @@ Order Service: GET /api/order endpoint
   - Ввести корректное сообщение к коммиту, к примеру MainActivity: hello word message
   - Commit
 - делаем `push` из терминала
-  - git push origin task-1
+  - `git push origin task-1`
 - Переходим по ссылке для создания пулл реквеста
   - в Reviewers выбираем всех участников
   - в Assigne ставим того тко будет мерджить
@@ -47,4 +47,4 @@ Order Service: GET /api/order endpoint
 ## Команда
 * Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
 * Даниил Чернов - [GitHub](https://github.com/Lackier)
-* Даннил Кучеренко - [GitHub](https://github.com/Danil-dn)
+* Данил Кучеренко - [GitHub](https://github.com/Danil-dn)
