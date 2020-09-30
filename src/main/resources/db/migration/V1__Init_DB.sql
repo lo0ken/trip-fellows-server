@@ -38,6 +38,7 @@ create table trip (
   start_point_id integer not null,
   end_point_id integer not null,
   price numeric,
+  creator_id integer not null,
   create_dt timestamp not null,
   start_dt timestamp not null,
   end_dt timestamp not null,
@@ -49,6 +50,7 @@ create table trip (
 alter table trip add constraint fk_trip_start_point foreign key (start_point_id) references point (id);
 alter table trip add constraint fk_trip_end_point foreign key (end_point_id) references point (id);
 alter table trip add constraint fk_trip_status foreign key (status_id) references trip_status (id);
+alter table trip add constraint fk_trip_creator foreign key (creator_id) references account (id);
 
 create table trip_account (
   id serial not null primary key,
