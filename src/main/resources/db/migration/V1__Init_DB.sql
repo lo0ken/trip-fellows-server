@@ -46,9 +46,9 @@ create table trip (
   places_count integer
 );
 
-alter table trip add constraint fk_trip_start_point foreign key (start_point_id) references point(id);
-alter table trip add constraint fk_trip_end_point foreign key (end_point_id) references point(id);
-alter table trip add constraint fk_trip_status foreign key (status_id) references trip_status(id);
+alter table trip add constraint fk_trip_start_point foreign key (start_point_id) references point (id);
+alter table trip add constraint fk_trip_end_point foreign key (end_point_id) references point (id);
+alter table trip add constraint fk_trip_status foreign key (status_id) references trip_status (id);
 
 create table trip_account (
   id serial not null primary key,
