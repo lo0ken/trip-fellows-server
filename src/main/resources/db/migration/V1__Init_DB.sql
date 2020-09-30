@@ -49,3 +49,13 @@ create table trip (
 alter table trip add constraint fk_trip_start_point foreign key (start_point_id) references point(id);
 alter table trip add constraint fk_trip_end_point foreign key (end_point_id) references point(id);
 alter table trip add constraint fk_trip_status foreign key (status_id) references trip_status(id);
+
+create table trip_account (
+  id serial not null primary key,
+  account_id int not null,
+  trip_id int not null,
+  role_id int not null
+);
+
+alter table trip_account add constraint fk_account_id foreign key (account_id) references account (id);
+alter table trip_account add constraint fk_trip_id foreign key (trip_id) references trip (id);
