@@ -61,3 +61,4 @@ create table trip_account (
 
 alter table trip_account add constraint fk_account_id foreign key (account_id) references account (id);
 alter table trip_account add constraint fk_trip_id foreign key (trip_id) references trip (id);
+alter table trip_account add constraint fk_role_id foreign key (role_id) references role (id);
