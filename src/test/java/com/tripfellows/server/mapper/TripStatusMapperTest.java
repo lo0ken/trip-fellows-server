@@ -17,7 +17,7 @@ public class TripStatusMapperTest {
 
     @Test
     @SneakyThrows
-    public void roleConversionTest() {
+    public void tripStatusConversionTest() {
         EasyRandom generator = new EasyRandom();
 
         TripStatus expectedDto = generator.nextObject(TripStatus.class);

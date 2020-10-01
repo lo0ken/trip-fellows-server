@@ -19,7 +19,7 @@ public class AccountMapperTest {
 
     @Test
     @SneakyThrows
-    public void roleConversionTest() {
+    public void accountConversionTest() {
         EasyRandom generator = new EasyRandom();
 
         Account expectedDto = generator.nextObject(Account.class);

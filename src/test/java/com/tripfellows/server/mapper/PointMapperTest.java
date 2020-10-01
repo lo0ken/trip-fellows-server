@@ -17,7 +17,7 @@ public class PointMapperTest {
 
     @Test
     @SneakyThrows
-    public void roleConversionTest() {
+    public void pointConversionTest() {
         EasyRandom generator = new EasyRandom();
 
         Point expectedDto = generator.nextObject(Point.class);
