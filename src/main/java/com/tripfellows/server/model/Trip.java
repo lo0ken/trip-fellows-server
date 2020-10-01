@@ -2,14 +2,12 @@ package com.tripfellows.server.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter @Setter
-@NoArgsConstructor
 @Builder(toBuilder = true)
 public class Trip {
     private Integer id;
