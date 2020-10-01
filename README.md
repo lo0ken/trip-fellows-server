@@ -41,8 +41,22 @@ Order Service: GET /api/order endpoint
   - `git push origin task-1`
 - Переходим по ссылке для создания пулл реквеста
   - в Reviewers выбираем всех участников
-  - в Assigne ставим того тко будет мерджить
+  - в Assignee ставим того тко будет мерджить
   - Отправляем ссылку на пулл-реквест в общий чат
+  
+## Переменные окружения
+- создать файл с переменными окружения (в любой директории), например `placeholder.properties`
+- в файле `apache-tomcat/conf/context.xml` внутри тега `Context` вписываем указанный тег: `<Environment name="spring.config.location" value="file:{FILE_LOCATION}" type="java.lang.String"/>`,
+где в `FILE_LOCATION` вписываем местоположение файла, например: `D:/Java/placeholder.properties`
+- ВАЖНО! Файл должен иметь расширение `.properties`! У меня почему-то tomcat отказывался воспринимать его без данного расширения
+
+### Пример содержимого файла `placeholder.properties`
+```
+datasource.url=jdbc:postgresql://localhost:5432/trip-fellows-local-db
+datasource.username=postgres
+datasource.password=postgres
+jpa.show-sql=true
+```
   
 ## Команда
 * Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
