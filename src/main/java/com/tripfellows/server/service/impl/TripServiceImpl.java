@@ -1,8 +1,6 @@
 package com.tripfellows.server.service.impl;
 
-import com.tripfellows.server.entity.TripEntity;
 import com.tripfellows.server.mapper.TripMapper;
-import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.repository.TripRepository;
 import com.tripfellows.server.service.api.TripService;
 import lombok.extern.slf4j.Slf4j;
