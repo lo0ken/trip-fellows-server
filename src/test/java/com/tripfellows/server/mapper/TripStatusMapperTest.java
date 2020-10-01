@@ -2,16 +2,14 @@ package com.tripfellows.server.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.tripfellows.server.entity.PointEntity;
 import com.tripfellows.server.entity.TripStatusEntity;
-import com.tripfellows.server.model.Point;
 import com.tripfellows.server.model.TripStatus;
 import lombok.SneakyThrows;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TripStatusMapperTest {
 
