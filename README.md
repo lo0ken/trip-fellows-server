@@ -10,6 +10,11 @@
 * Hibernate
 * Flyway
 * Postgres
+* JUnit
+* Lombok
+* MapStruct
+* EasyRandom
+* Swagger
 
 ## Регламент работы с гитом
 Ветка `master` - релизная, в <b>неё не коммитим и не пушим ничего!</b> В неё будем сливать изменения вместе!
@@ -57,6 +62,9 @@ datasource.username=postgres
 datasource.password=postgres
 jpa.show-sql=true
 ```
+
+## Swagger
+Документация по api доступна по адресу `http://localhost:8080/swagger-ui.html#/`
   
 ## Команда
 * Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
