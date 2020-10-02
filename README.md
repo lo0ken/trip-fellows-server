@@ -10,6 +10,11 @@
 * Hibernate
 * Flyway
 * Postgres
+* JUnit
+* Lombok
+* MapStruct
+* EasyRandom
+* Swagger
 
 ## Регламент работы с гитом
 Ветка `master` - релизная, в <b>неё не коммитим и не пушим ничего!</b> В неё будем сливать изменения вместе!
