@@ -57,6 +57,9 @@ datasource.username=postgres
 datasource.password=postgres
 jpa.show-sql=true
 ```
+
+## Swagger
+Документация по api доступна по адресу `http://localhost:8080/swagger-ui.html#/`
   
 ## Команда
 * Дмитрий Гаврилов - [GitHub](https://github.com/lo0ken)
