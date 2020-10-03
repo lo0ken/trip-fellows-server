@@ -59,4 +59,26 @@ public class AccountController {
         return ResponseEntity.created(new URI("/api/accounts/" + result.getId()))
                 .body(result);
     }
+
+    /**
+     * PUT /api/accounts : Updates an existing account
+     *
+     * @param account the account to update
+     * @return the ResponseEntity with status 200 (OK) and with body the account,
+     * or with status 400 (Bad Request) if the account is not valid,
+     * or with status 500 (Internal Server Error) if the account couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping
+    public ResponseEntity<Account> updateAccount(@RequestBody Account account) throws URISyntaxException {
+        log.debug("REST request to update Account : {}", account);
+
+        if (isNull(account.getId())) {
+            return createAccount(account);
+        }
+
+        Account result = accountService.save(account);
+
+        return ResponseEntity.ok(result);
+    }
 }

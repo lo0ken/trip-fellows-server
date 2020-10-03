@@ -75,7 +75,6 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.id").value(created.getId()))
                 .andExpect(jsonPath("$.name").value(created.getName()))
                 .andExpect(jsonPath("$.phoneNumber").value(created.getPhoneNumber()));
-
     }
 
     @Test
@@ -96,5 +95,35 @@ public class AccountControllerTest {
                 .content(new ObjectMapper().writeValueAsBytes(null)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void updateAccountTest() throws Exception {
+        Account account = new EasyRandom().nextObject(Account.class);
+
+        when(accountService.save(account)).thenReturn(account);
+
+        mockMvc.perform(put("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(account)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(account)));
+    }
+
+    @Test
+    public void updateNonExistingAccountTest() throws Exception {
+        EasyRandom easyRandom = new EasyRandom();
+
+        Account account = easyRandom.nextObject(Account.class);
+        account.setId(null);
+        Account created = easyRandom.nextObject(Account.class);
+
+        when(accountService.save(account)).thenReturn(created);
+
+        mockMvc.perform(put("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(account)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 }
