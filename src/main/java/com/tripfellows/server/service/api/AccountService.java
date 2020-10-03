@@ -12,4 +12,13 @@ public interface AccountService {
      * @return Optional with body the account or Optional.empty
      */
     Optional<Account> findById(Integer id);
+
+    /**
+     * Update all information for a specific account, and return the modified account
+     * Or create it if not exists
+     *
+     * @param account account to create or update
+     * @return updated or created account
+     */
+    Account save(Account account);
 }
