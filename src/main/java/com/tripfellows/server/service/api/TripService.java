@@ -21,5 +21,5 @@ public interface TripService {
      * @param accountId id of account which trips to retrieve
      * @return trips of account or empty list
      */
-    List<Trip> findTripsByAccount(Integer accountId);
+    List<Trip> findByAccountId(Integer accountId);
 }

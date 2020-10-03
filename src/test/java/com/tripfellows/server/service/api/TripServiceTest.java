@@ -81,7 +81,7 @@ public class TripServiceTest {
                 .map(tripMapper::map)
                 .collect(toList());
 
-        List<Trip> result = tripService.findTripsByAccount(accountId);
+        List<Trip> result = tripService.findByAccountId(accountId);
 
         ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
         assertEquals(writer.writeValueAsString(expected), writer.writeValueAsString(result));

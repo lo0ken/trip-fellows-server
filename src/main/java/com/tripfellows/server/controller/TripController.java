@@ -48,7 +48,7 @@ public class TripController {
     public ResponseEntity<List<Trip>> findTripsByAccount(@RequestParam(value = "accountId") Integer accountId) {
         log.debug("REST request to get all trips of accountId: {}", accountId);
 
-        List<Trip> trips = tripService.findTripsByAccount(accountId);
+        List<Trip> trips = tripService.findByAccountId(accountId);
         return ResponseEntity.ok(trips);
     }
 }
