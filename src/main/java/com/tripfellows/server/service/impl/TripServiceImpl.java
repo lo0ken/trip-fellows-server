@@ -34,6 +34,7 @@ public class TripServiceImpl implements TripService {
     public Optional<Trip> findById(Integer id) {
         log.debug("Retrieving trip with id {}", id);
         Optional<TripEntity> tripEntity = tripRepository.findById(id);
+
         return tripEntity.map(tripMapper::map);
     }
 }
