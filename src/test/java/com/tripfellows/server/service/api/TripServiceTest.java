@@ -3,12 +3,15 @@ package com.tripfellows.server.service.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.tripfellows.server.entity.AccountEntity;
+import com.tripfellows.server.entity.TripAccountEntity;
 import com.tripfellows.server.entity.TripEntity;
 import com.tripfellows.server.mapper.TripMapper;
 import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.repository.TripRepository;
 import com.tripfellows.server.service.impl.TripServiceImpl;
 import org.jeasy.random.EasyRandom;
+import org.jeasy.random.EasyRandomParameters;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mapstruct.factory.Mappers;
@@ -16,8 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -36,7 +41,7 @@ public class TripServiceTest {
     public void findWhenTripExistsTest() throws JsonProcessingException {
         TripEntity saved = new EasyRandom().nextObject(TripEntity.class);
 
-        when(tripRepository.findById(any())).thenReturn(Optional.of(saved));
+        when(tripRepository.findById(saved.getId())).thenReturn(Optional.of(saved));
 
         Optional<Trip> trip = tripService.findById(saved.getId());
 
@@ -52,5 +57,33 @@ public class TripServiceTest {
         Optional<Trip> trip = tripService.findById(1);
 
         assertFalse(trip.isPresent());
+    }
+
+    @Test
+    public void findAllTripsByAccountTest() throws JsonProcessingException {
+        int accountId = 1;
+        int quantity = 10;
+
+        AccountEntity account = new EasyRandom().nextObject(AccountEntity.class);
+        account.setId(accountId);
+
+        EasyRandomParameters parameters = new EasyRandomParameters()
+                .randomize(AccountEntity.class, () -> account);
+
+        List<TripEntity> saved = new EasyRandom(parameters)
+                .objects(TripAccountEntity.class, quantity)
+                .map(TripAccountEntity::getTrip)
+                .collect(toList());
+
+        when(tripRepository.findByAccountId(accountId)).thenReturn(saved);
+
+        List<Trip> expected = saved.stream()
+                .map(tripMapper::map)
+                .collect(toList());
+
+        List<Trip> result = tripService.findByAccountId(accountId);
+
+        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        assertEquals(writer.writeValueAsString(expected), writer.writeValueAsString(result));
     }
 }

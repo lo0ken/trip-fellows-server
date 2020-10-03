@@ -4,11 +4,9 @@ import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.service.api.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,17 +24,31 @@ public class TripController {
     }
 
     /**
-     * GET  /trips/:id : get the "id" trip.
+     * GET  /api/trips/:id : get the "id" trip.
      *
      * @param id the id of the trip to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the trip, or with status 404 (Not Found)
      */
-    @GetMapping("/trips/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Trip> findTrip(@PathVariable Integer id) {
         log.debug("REST request to get Trip : {}", id);
 
         Optional<Trip> trip = tripService.findById(id);
         return trip.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
+     * GET  /api/trips/getByAccount/ : get trips of the "accountId".
+     *
+     * @param accountId the accountId of the trips to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the trips of account
+     */
+    @GetMapping("/getByAccount")
+    public ResponseEntity<List<Trip>> findTripsByAccount(@RequestParam(value = "accountId") Integer accountId) {
+        log.debug("REST request to get all trips of accountId: {}", accountId);
+
+        List<Trip> trips = tripService.findByAccountId(accountId);
+        return ResponseEntity.ok(trips);
     }
 }
