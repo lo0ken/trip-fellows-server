@@ -29,7 +29,7 @@ public class TripController {
      * GET  /trips/:id : get the "id" trip.
      *
      * @param id the id of the trip to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the group, or with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the trip, or with status 404 (Not Found)
      */
     @GetMapping("/trips/{id}")
     public ResponseEntity<Trip> findTrip(@PathVariable Integer id) {
