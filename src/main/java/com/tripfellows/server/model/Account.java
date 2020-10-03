@@ -6,8 +6,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class Account {
-    private Integer id;
+public class Account extends IdModel {
     private String name;
     private String phoneNumber;
 

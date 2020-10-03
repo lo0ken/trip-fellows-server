@@ -54,4 +54,15 @@ public class AccountServiceTest {
 
         assertFalse(account.isPresent());
     }
+
+    @Test
+    public void saveTest() throws JsonProcessingException {
+        Account account = new EasyRandom().nextObject(Account.class);
+
+        when(accountRepository.save(any(AccountEntity.class))).thenReturn(accountMapper.map(account));
+        Account saved = accountService.save(account);
+
+        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        assertEquals(writer.writeValueAsString(account), writer.writeValueAsString(saved));
+    }
 }

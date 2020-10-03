@@ -4,12 +4,13 @@ import com.tripfellows.server.model.Account;
 import com.tripfellows.server.service.api.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * REST controller for managing accounts
@@ -37,5 +38,18 @@ public class AccountController {
 
         Optional<Account> account = accountService.findById(id);
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Account> createAccount(@RequestBody Account account) throws URISyntaxException {
+        log.debug("REST request to create account");
+
+        if (!isNull(account.getId())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Account result = accountService.save(account);
+        return ResponseEntity.created(new URI("/api/accounts/" + result.getId()))
+                .body(result);
     }
 }
