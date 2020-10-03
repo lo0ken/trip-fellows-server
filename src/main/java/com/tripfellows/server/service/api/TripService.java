@@ -1,4 +1,15 @@
 package com.tripfellows.server.service.api;
 
+import com.tripfellows.server.model.Trip;
+
+import java.util.Optional;
+
 public interface TripService {
+
+    /**
+     * Retrieve trip from database
+     * @param id trip id to retrieve
+     * @return Optional with body the trip or Optional.empty
+     */
+    Optional<Trip> findById(Integer id);
 }
