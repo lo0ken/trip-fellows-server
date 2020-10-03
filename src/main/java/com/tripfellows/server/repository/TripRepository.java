@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface TripRepository extends JpaRepository<TripEntity, Integer> {
 
-    @Query("select tae.trip from TripAccountEntity tae where tae.account.id = :accountId")
+    @Query("select ta.trip from TripAccountEntity ta where ta.account.id = :accountId")
     List<TripEntity> findByAccountId (@Param("accountId") Integer accountId);
 }
