@@ -84,7 +84,6 @@ public class TripControllerTest {
         int quantity = 0;
 
         List<Trip> expected = Collections.emptyList();
-
         when(tripService.findByAccountId(accountId)).thenReturn(expected);
 
         mockMvc.perform(get("/api/trips/getByAccount", accountId)

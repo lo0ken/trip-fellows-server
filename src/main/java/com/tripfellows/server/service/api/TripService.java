@@ -16,10 +16,10 @@ public interface TripService {
     Optional<Trip> findById(Integer id);
 
     /**
-     * Retrieve trips from database
+     * Retrieve trips from database, filtered by accountId
      *
      * @param accountId id of account which trips to retrieve
-     * @return trips of account or empty list
+     * @return list of trips of the account or empty list
      */
     List<Trip> findByAccountId(Integer accountId);
 }

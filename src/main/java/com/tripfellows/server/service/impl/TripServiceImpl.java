@@ -43,7 +43,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<Trip> findByAccountId(Integer accountId) {
         log.debug("Retrieving trips of account with id {}", accountId);
-
         List<TripEntity> trips = tripRepository.findByAccountId(accountId);
 
         return trips.stream()
