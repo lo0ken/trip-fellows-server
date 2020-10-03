@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     /**
-     * GET /accounts/:id : get the account with specified id
+     * GET /api/accounts/:id : get the account with specified id
      *
      * @param id the id of the account to retrieve
      * @return the ResponseEntity with the status 200 (OK) and with body the account, or with status 400 (Not Found)
@@ -40,6 +40,13 @@ public class AccountController {
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    /**
+     * POST /api/accounts : Create a new account
+     *
+     * @param account the account to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new account, or with status 400 (Bad Request) if the account has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
     @PostMapping
     public ResponseEntity<Account> createAccount(@RequestBody Account account) throws URISyntaxException {
         log.debug("REST request to create account");
