@@ -45,7 +45,7 @@ public class TripController {
      * @return the ResponseEntity with status 200 (OK) and with body the trips of account
      */
     @GetMapping("/getByAccount")
-    public ResponseEntity<List<Trip>> findTripsByAccount(@RequestParam(value = "accountId", required = true) Integer accountId) {
+    public ResponseEntity<List<Trip>> findTripsByAccount(@RequestParam(value = "accountId") Integer accountId) {
         log.debug("REST request to get all trips of accountId: {}", accountId);
 
         List<Trip> trips = tripService.findTripsByAccount(accountId);
