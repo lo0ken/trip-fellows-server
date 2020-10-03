@@ -69,7 +69,7 @@ public class TripControllerTest {
         List<Trip> expected = new EasyRandom().objects(Trip.class, quantity)
                 .collect(toList());
 
-        when(tripService.findTripsByAccount(accountId)).thenReturn(expected);
+        when(tripService.findByAccountId(accountId)).thenReturn(expected);
 
         mockMvc.perform(get("/api/trips/getByAccount", accountId)
                 .param("accountId", accountId.toString()))
@@ -85,7 +85,7 @@ public class TripControllerTest {
 
         List<Trip> expected = Collections.emptyList();
 
-        when(tripService.findTripsByAccount(accountId)).thenReturn(expected);
+        when(tripService.findByAccountId(accountId)).thenReturn(expected);
 
         mockMvc.perform(get("/api/trips/getByAccount", accountId)
                 .param("accountId", accountId.toString()))
