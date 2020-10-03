@@ -37,4 +37,12 @@ public class AccountServiceImpl implements AccountService {
 
         return accountEntityOptional.map(accountMapper::map);
     }
+
+    @Override
+    public Account save(Account account) {
+        AccountEntity saved = accountRepository.save(accountMapper.map(account));
+        log.debug("Account with id {} has been saved", saved.getId());
+
+        return accountMapper.map(saved);
+    }
 }
