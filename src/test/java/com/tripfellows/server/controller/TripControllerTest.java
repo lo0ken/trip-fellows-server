@@ -1,8 +1,12 @@
 package com.tripfellows.server.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +22,10 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -33,6 +39,15 @@ public class TripControllerTest {
     TripService tripService;
 
     EasyRandom easyRandom = new EasyRandom();
+
+    ObjectMapper objectMapper;
+
+    @Before
+    public void configureObjectMapper() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     @Test
     public void getTripWhenExistsTest() throws Exception {
@@ -91,5 +106,32 @@ public class TripControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(quantity)));
+    }
+
+    @Test
+    public void createTripTest() throws Exception {
+        EasyRandom easyRandom = new EasyRandom();
+        Trip toCreate = easyRandom.nextObject(Trip.class);
+        toCreate.setId(null);
+        Trip created = easyRandom.nextObject(Trip.class);
+
+        when(tripService.save(any())).thenReturn(created);
+
+        mockMvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(toCreate)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+
+    @Test
+    public void createTripWithExistingId() throws Exception {
+        Trip trip = new EasyRandom().nextObject(Trip.class);
+
+        mockMvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(trip)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }

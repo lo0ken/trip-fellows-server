@@ -6,8 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * REST controller for managing trips
@@ -50,5 +54,25 @@ public class TripController {
 
         List<Trip> trips = tripService.findByAccountId(accountId);
         return ResponseEntity.ok(trips);
+    }
+
+    /**
+     * POST /api/trips : create a new trip
+     *
+     * @param trip the trip to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new trip, or with status 400 (Bad Request) if the trip has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping
+    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) throws URISyntaxException {
+        log.debug("REST request to create trip");
+
+        if (!isNull(trip.getId())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Trip result = tripService.save(trip);
+        return ResponseEntity.created(new URI("/api/trips/" + result.getId()))
+                .body(result);
     }
 }
