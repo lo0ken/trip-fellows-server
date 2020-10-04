@@ -10,5 +10,5 @@ public interface TripMapper {
     @Mapping(source = "tripToAccounts", target = "members")
     Trip map(TripEntity entity);
 
-    TripEntity map(Trip role);
+    TripEntity map(Trip trip);
 }
