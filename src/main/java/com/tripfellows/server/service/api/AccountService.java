@@ -2,9 +2,10 @@ package com.tripfellows.server.service.api;
 
 import com.tripfellows.server.model.Account;
 
+
 import java.util.Optional;
 
-public interface AccountService {
+public interface AccountService  {
 
     /**
      * Retrieve account from database
@@ -21,4 +22,11 @@ public interface AccountService {
      * @return updated or created account
      */
     Account save(Account account);
+
+    /**
+     *Delete all information for a specific account, and return the modified account
+     *
+     * @param id account to delete
+     */
+    void deleteById(Integer id);
 }

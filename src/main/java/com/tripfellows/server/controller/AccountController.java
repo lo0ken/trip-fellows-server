@@ -81,4 +81,10 @@ public class AccountController {
 
         return ResponseEntity.ok(result);
     }
+    @DeleteMapping("/{id}")
+    public void   deleteAccount(@PathVariable Integer id) {
+        log.debug("REST request to get Account with id {}", id);
+
+        accountService.deleteById(id);
+    }
 }
