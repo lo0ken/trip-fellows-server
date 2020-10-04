@@ -22,4 +22,13 @@ public interface TripService {
      * @return list of trips of the account or empty list
      */
     List<Trip> findByAccountId(Integer accountId);
+
+    /**
+     * Update all information for a specific trip, and return the modified trip
+     * Or create it if not exists
+     *
+     * @param trip trip to create or update
+     * @return updated or created trip
+     */
+    Trip save(Trip trip);
 }
