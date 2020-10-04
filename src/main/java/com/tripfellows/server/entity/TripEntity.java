@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "trip")
@@ -54,5 +54,5 @@ public class TripEntity {
     private Integer placesCount;
 
     @OneToMany(mappedBy = "trip", fetch = FetchType.LAZY)
-    private Set<TripAccountEntity> tripToAccounts;
+    private List<TripAccountEntity> tripToAccounts;
 }
