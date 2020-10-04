@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.util.Optional;
 
 
@@ -37,7 +38,13 @@ public class AccountServiceImpl implements AccountService {
 
         return accountEntityOptional.map(accountMapper::map);
     }
+    @Override
+    public void deleteById(Integer id) {
+        log.debug("Delete account with identifier {}", id);
+        accountRepository.deleteById(id);
 
+
+    }
     @Override
     public Account save(Account account) {
         AccountEntity saved = accountRepository.save(accountMapper.map(account));
