@@ -1,6 +1,9 @@
 package com.tripfellows.server.service.impl;
 
+import com.tripfellows.server.entity.TripStatusEntity;
+import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.mapper.TripStatusMapper;
+import com.tripfellows.server.model.TripStatus;
 import com.tripfellows.server.repository.TripStatusRepository;
 import com.tripfellows.server.service.api.TripStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,5 +27,13 @@ public class TripStatusServiceImpl implements TripStatusService {
     public TripStatusServiceImpl(TripStatusRepository tripStatusRepository) {
         this.tripStatusRepository = tripStatusRepository;
         tripStatusMapper = Mappers.getMapper(TripStatusMapper.class);
+    }
+
+    @Override
+    public TripStatus findByCode(TripStatusCodeEnum code) {
+        log.debug("searching trip status by code : {}", code.getValue());
+        TripStatusEntity tripStatusEntity = tripStatusRepository.findByCode(code);
+
+        return tripStatusMapper.map(tripStatusEntity);
     }
 }
