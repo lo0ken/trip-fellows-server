@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.model.TripMember;
+import com.tripfellows.server.model.request.AddMemberRequest;
+import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Before;
@@ -37,6 +40,9 @@ public class TripControllerTest {
 
     @MockBean
     TripService tripService;
+
+    @MockBean
+    TripAccountService tripAccountService;
 
     EasyRandom easyRandom = new EasyRandom();
 
@@ -133,5 +139,21 @@ public class TripControllerTest {
                 .content(objectMapper.writeValueAsBytes(trip)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    public void addMemberTest() throws Exception {
+        EasyRandom easyRandom = new EasyRandom();
+        AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
+        TripMember created = easyRandom.nextObject(TripMember.class);
+
+        when(tripAccountService.addTripMember(request.getTripId(), request.getAccountId(), request.getRoleCode()))
+                .thenReturn(created);
+
+        mockMvc.perform(post("/api/trips/addMember")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isNotEmpty());
     }
 }
