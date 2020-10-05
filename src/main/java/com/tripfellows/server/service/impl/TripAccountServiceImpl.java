@@ -1,8 +1,11 @@
 package com.tripfellows.server.service.impl;
 
+import com.tripfellows.server.entity.TripAccountEntity;
+import com.tripfellows.server.enums.RoleCodeEnum;
 import com.tripfellows.server.mapper.TripAccountMapper;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.repository.TripAccountRepository;
+import com.tripfellows.server.service.api.RoleService;
 import com.tripfellows.server.service.api.TripAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
@@ -23,8 +26,11 @@ public class TripAccountServiceImpl implements TripAccountService {
 
     private final TripAccountRepository tripAccountRepository;
 
-    public TripAccountServiceImpl(TripAccountRepository tripAccountRepository) {
+    private final RoleService roleService;
+
+    public TripAccountServiceImpl(TripAccountRepository tripAccountRepository, RoleService roleService) {
         this.tripAccountRepository = tripAccountRepository;
+        this.roleService = roleService;
         tripAccountMapper = Mappers.getMapper(TripAccountMapper.class);
     }
 
@@ -37,5 +43,17 @@ public class TripAccountServiceImpl implements TripAccountService {
         log.debug("Saved members to trip with id: {}", tripId);
 
         return members;
+    }
+
+    @Override
+    public TripMember addTripMember(Integer tripId, Integer accountId, RoleCodeEnum roleCode) {
+        Integer roleId = roleService.findByCode(roleCode).getId();
+
+        TripAccountEntity entity = tripAccountMapper.from(tripId, accountId, roleId);
+
+        TripAccountEntity saved = tripAccountRepository.save(entity);
+        log.debug("Saved new trip_account record with id : {}", saved.getId());
+
+        return tripAccountMapper.map(saved);
     }
 }
