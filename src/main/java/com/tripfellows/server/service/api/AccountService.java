@@ -21,4 +21,10 @@ public interface AccountService {
      * @return updated or created account
      */
     Account save(Account account);
+
+    /**
+     * Delete account from data base
+     * @param id of account to delete
+     */
+    void deleteById(Integer id);
 }
