@@ -81,6 +81,7 @@ public class AccountController {
 
         return ResponseEntity.ok(result);
     }
+
     /**
      * DELETE /api/accounts/:id : delete the account with specified id
      *
