@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
@@ -64,5 +64,12 @@ public class AccountServiceTest {
 
         ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
         assertEquals(writer.writeValueAsString(account), writer.writeValueAsString(saved));
+    }
+    @Test
+    public void deleteId() {
+        AccountEntity del = new EasyRandom().nextObject(AccountEntity.class);
+
+        accountService.deleteById(del.getId());
+        verify(accountRepository,atLeastOnce()).deleteById(del.getId());
     }
 }

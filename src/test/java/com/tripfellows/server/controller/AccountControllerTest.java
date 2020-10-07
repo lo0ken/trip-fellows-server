@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -125,5 +125,17 @@ public class AccountControllerTest {
                 .content(new ObjectMapper().writeValueAsBytes(account)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+    @Test
+    public  void deleteAccountTest() throws Exception {
+        Account account = easyRandom.nextObject(Account.class);
+        account.setId(1);
+
+
+        mockMvc.perform(delete("/api/accounts/{id}", account.getId()))
+                .andExpect(status().isOk())
+                /*.andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(account.getId()))*/;
+        verify(accountService,atLeastOnce()).deleteById(account.getId());
     }
 }
