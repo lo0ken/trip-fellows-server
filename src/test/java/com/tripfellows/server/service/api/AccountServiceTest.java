@@ -65,6 +65,7 @@ public class AccountServiceTest {
         ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
         assertEquals(writer.writeValueAsString(account), writer.writeValueAsString(saved));
     }
+
     @Test
     public void deleteAccountByIdTest() {
         Integer idToDelete = new EasyRandom().nextInt();

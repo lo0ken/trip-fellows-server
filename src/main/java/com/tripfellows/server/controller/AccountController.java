@@ -82,7 +82,7 @@ public class AccountController {
         return ResponseEntity.ok(result);
     }
     /**
-     * DELETE /api/accounts/:deleteId : delete the account with specified id
+     * DELETE /api/accounts/:id : delete the account with specified id
      *
      * @param id the id of the account to delete
      */

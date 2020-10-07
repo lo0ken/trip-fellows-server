@@ -23,7 +23,7 @@ public interface AccountService {
     Account save(Account account);
 
     /**
-     *Delete account from data base
+     * Delete account from data base
      * @param id of account to delete
      */
     void deleteById(Integer id);

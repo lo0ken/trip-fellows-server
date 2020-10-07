@@ -126,6 +126,7 @@ public class AccountControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
+
     @Test
     public void deleteAccountTest() throws Exception {
         Account account = easyRandom.nextObject(Account.class);
