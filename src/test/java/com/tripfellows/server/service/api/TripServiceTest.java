@@ -9,7 +9,6 @@ import com.tripfellows.server.entity.TripEntity;
 import com.tripfellows.server.entity.TripStatusEntity;
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.mapper.TripMapper;
-import com.tripfellows.server.mapper.TripStatusMapper;
 import com.tripfellows.server.model.Point;
 import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.model.TripStatus;
@@ -121,7 +120,7 @@ public class TripServiceTest {
         when(tripRepository.save(any())).thenReturn(tripEntity);
         when(tripAccountService.saveAll(any(), any())).thenReturn(Collections.emptyList());
 
-        Trip tripSaved = tripService.save(tripToSave);
+        Trip tripSaved = tripService.create(tripToSave);
 
         assertEquals(TripStatusCodeEnum.WAITING, tripSaved.getStatus().getCode());
 
@@ -137,7 +136,7 @@ public class TripServiceTest {
         when(tripRepository.save(any())).thenReturn(tripEntity);
         when(tripAccountService.saveAll(tripEntity.getId(), trip.getMembers())).thenReturn(trip.getMembers());
 
-        Trip result = tripService.save(trip);
+        Trip result = tripService.create(trip);
 
         verify(tripAccountService).saveAll(eq(tripEntity.getId()),
                 argThat(members -> members.containsAll(trip.getMembers())));
@@ -167,7 +166,7 @@ public class TripServiceTest {
         when(pointService.save(startPoint)).thenReturn(startPointWithId);
         when(pointService.save(endPoint)).thenReturn(endPointWithId);
 
-        tripService.save(trip);
+        tripService.create(trip);
 
         verify(pointService).save(startPoint);
         verify(pointService).save(endPoint);
@@ -182,7 +181,7 @@ public class TripServiceTest {
 
         when(tripRepository.save(any())).thenReturn(tripEntity);
 
-        tripService.save(trip);
+        tripService.create(trip);
 
         verify(pointService, never()).save(any());
     }
