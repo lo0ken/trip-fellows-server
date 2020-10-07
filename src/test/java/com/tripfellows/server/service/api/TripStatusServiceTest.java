@@ -49,7 +49,7 @@ public class TripStatusServiceTest {
     }
 
     @Test
-    public void updateStatus() {
+    public void updateStatusWhenTripExists() {
         EasyRandom easyRandom = new EasyRandom();
         Trip saved = easyRandom.nextObject(Trip.class);
         saved.setId(1);
@@ -69,5 +69,17 @@ public class TripStatusServiceTest {
 
         assertThat(actual.isPresent()).isTrue();
         assertEquals(statusToSet, actual.get().getStatus().getCode());
+    }
+
+    @Test
+    public void updateStatusWhenTripNotExists() {
+        Integer tripId = 1;
+        TripStatusCodeEnum statusToSet = new EasyRandom().nextObject(TripStatusCodeEnum.class);
+
+        when(tripService.findById(tripId)).thenReturn(Optional.empty());
+
+        Optional<Trip> actual = tripStatusService.updateTripStatus(tripId, statusToSet);
+
+        assertThat(actual.isPresent()).isFalse();
     }
 }
