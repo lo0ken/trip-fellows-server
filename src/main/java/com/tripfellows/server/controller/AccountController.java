@@ -81,4 +81,16 @@ public class AccountController {
 
         return ResponseEntity.ok(result);
     }
+
+    /**
+     * DELETE /api/accounts/:id : delete the account with specified id
+     *
+     * @param id the id of the account to delete
+     */
+    @DeleteMapping("/{id}")
+    public void deleteAccount(@PathVariable Integer id) {
+        log.debug("REST request to delete Account with id {}", id);
+
+        accountService.deleteById(id);
+    }
 }

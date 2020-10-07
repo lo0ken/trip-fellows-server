@@ -45,4 +45,10 @@ public class AccountServiceImpl implements AccountService {
 
         return accountMapper.map(saved);
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        log.debug("Delete account with identifier {}", id);
+        accountRepository.deleteById(id);
+    }
 }
