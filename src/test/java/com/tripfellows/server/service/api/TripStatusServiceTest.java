@@ -67,7 +67,7 @@ public class TripStatusServiceTest {
 
         verify(tripService).update(argThat(a -> a.getStatus().getCode().equals(statusToSet)));
 
-        assertThat(actual.isPresent()).isEqualTo(true);
-        actual.ifPresent(trip -> assertEquals(statusToSet, trip.getStatus().getCode()));
+        assertThat(actual.isPresent()).isTrue();
+        assertEquals(statusToSet, actual.get().getStatus().getCode());
     }
 }

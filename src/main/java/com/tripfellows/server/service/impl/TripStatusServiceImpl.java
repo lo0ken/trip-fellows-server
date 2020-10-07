@@ -57,6 +57,6 @@ public class TripStatusServiceImpl implements TripStatusService {
         trip.setStatus(findByCode(tripStatus));
         log.debug("Status of trip with id {} has been saved. New status is {}", trip.getId(), tripStatus.getValue());
 
-        return Optional.ofNullable(tripService.update(trip));
+        return Optional.of(tripService.update(trip));
     }
 }
