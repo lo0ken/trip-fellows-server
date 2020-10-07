@@ -77,7 +77,7 @@ public class TripController {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Trip result = tripService.save(trip);
+        Trip result = tripService.create(trip);
         return ResponseEntity.created(new URI("/api/trips/" + result.getId()))
                 .body(result);
     }

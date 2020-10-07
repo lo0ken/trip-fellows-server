@@ -24,11 +24,19 @@ public interface TripService {
     List<Trip> findByAccountId(Integer accountId);
 
     /**
+     * Save all information for a specific trip, and return the created trip
+     *
+     * @param trip trip to create
+     * @return created trip
+     */
+    Trip create(Trip trip);
+
+    /**
      * Update all information for a specific trip, and return the modified trip
      * Or create it if not exists
      *
-     * @param trip trip to create or update
-     * @return updated or created trip
+     * @param trip trip to update
+     * @return updated trip
      */
-    Trip save(Trip trip);
+    Trip update(Trip trip);
 }
