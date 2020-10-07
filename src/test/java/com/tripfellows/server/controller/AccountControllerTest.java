@@ -127,15 +127,13 @@ public class AccountControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
     @Test
-    public  void deleteAccountTest() throws Exception {
+    public void deleteAccountTest() throws Exception {
         Account account = easyRandom.nextObject(Account.class);
         account.setId(1);
 
-
         mockMvc.perform(delete("/api/accounts/{id}", account.getId()))
-                .andExpect(status().isOk())
-                /*.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(account.getId()))*/;
+                .andExpect(status().isOk());
+
         verify(accountService,atLeastOnce()).deleteById(account.getId());
     }
 }
