@@ -27,8 +27,8 @@ public class TripStatusController {
     /**
      * PUT  /api/trip-status : update status of the trip by "id" and "status".
      *
-     * @param tripId tripId the id of the trip
-     * @param status status new status for the trip
+     * @param tripId the id of the trip
+     * @param status new status for the trip
      * @return the ResponseEntity with status 200 (OK) and with body the trip, or with status 404 (Not Found)
      */
     @PutMapping
