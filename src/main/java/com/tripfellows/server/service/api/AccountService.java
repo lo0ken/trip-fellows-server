@@ -4,7 +4,7 @@ import com.tripfellows.server.model.Account;
 
 import java.util.Optional;
 
-public interface AccountService{
+public interface AccountService {
 
     /**
      * Retrieve account from database

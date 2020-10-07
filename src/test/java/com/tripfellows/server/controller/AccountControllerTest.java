@@ -129,7 +129,6 @@ public class AccountControllerTest {
     @Test
     public void deleteAccountTest() throws Exception {
         Account account = easyRandom.nextObject(Account.class);
-        account.setId(1);
 
         mockMvc.perform(delete("/api/accounts/{id}", account.getId()))
                 .andExpect(status().isOk());

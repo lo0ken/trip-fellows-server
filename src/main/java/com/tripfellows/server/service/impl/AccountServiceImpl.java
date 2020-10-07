@@ -37,17 +37,18 @@ public class AccountServiceImpl implements AccountService {
 
         return accountEntityOptional.map(accountMapper::map);
     }
-    @Override
-    public void deleteById(Integer id) {
-        log.debug("Delete account with identifier {}", id);
-        accountRepository.deleteById(id);
 
-    }
     @Override
     public Account save(Account account) {
         AccountEntity saved = accountRepository.save(accountMapper.map(account));
         log.debug("Account with id {} has been saved", saved.getId());
 
         return accountMapper.map(saved);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        log.debug("Delete account with identifier {}", id);
+        accountRepository.deleteById(id);
     }
 }
