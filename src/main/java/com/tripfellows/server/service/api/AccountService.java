@@ -24,7 +24,7 @@ public interface AccountService  {
     Account save(Account account);
 
     /**
-     *Delete all information for a specific account, and return the modified account
+     *Delete all information for a  account
      *
      * @param id account to delete
      */
