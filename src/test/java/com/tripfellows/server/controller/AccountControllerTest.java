@@ -134,6 +134,6 @@ public class AccountControllerTest {
         mockMvc.perform(delete("/api/accounts/{id}", account.getId()))
                 .andExpect(status().isOk());
 
-        verify(accountService,atLeastOnce()).deleteById(account.getId());
+        verify(accountService).deleteById(account.getId());
     }
 }

@@ -66,10 +66,11 @@ public class AccountServiceTest {
         assertEquals(writer.writeValueAsString(account), writer.writeValueAsString(saved));
     }
     @Test
-    public void deleteId() {
-        AccountEntity del = new EasyRandom().nextObject(AccountEntity.class);
+    public void deleteAccountByIdTest() {
+        Integer idToDelete = new EasyRandom().nextInt();
 
-        accountService.deleteById(del.getId());
-        verify(accountRepository,atLeastOnce()).deleteById(del.getId());
+        accountService.deleteById(idToDelete);
+
+        verify(accountRepository).deleteById(idToDelete);
     }
 }
