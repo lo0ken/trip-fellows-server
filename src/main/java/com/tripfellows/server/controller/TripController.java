@@ -1,13 +1,20 @@
 package com.tripfellows.server.controller;
 
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.model.TripMember;
+import com.tripfellows.server.model.request.AddMemberRequest;
+import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * REST controller for managing trips
@@ -19,8 +26,11 @@ public class TripController {
 
     private final TripService tripService;
 
-    public TripController(TripService tripService) {
+    private final TripAccountService tripAccountService;
+
+    public TripController(TripService tripService, TripAccountService tripAccountService) {
         this.tripService = tripService;
+        this.tripAccountService = tripAccountService;
     }
 
     /**
@@ -50,5 +60,45 @@ public class TripController {
 
         List<Trip> trips = tripService.findByAccountId(accountId);
         return ResponseEntity.ok(trips);
+    }
+
+    /**
+     * POST /api/trips : create a new trip
+     *
+     * @param trip the trip to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new trip, or with status 400 (Bad Request) if the trip has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping
+    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip) throws URISyntaxException {
+        log.debug("REST request to create trip");
+
+        if (!isNull(trip.getId())) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Trip result = tripService.save(trip);
+        return ResponseEntity.created(new URI("/api/trips/" + result.getId()))
+                .body(result);
+    }
+
+    /**
+     * POST /api/trips/addMember : add member to existing trip
+     *
+     * @param request request includes tripId, accountId, and roleCode
+     * @return the ResponseEntity with status 201 (Created) and with body the new trip member
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/addMember")
+    public ResponseEntity<TripMember> addMember(@RequestBody AddMemberRequest request) throws URISyntaxException {
+        log.debug("REST request to add member with accountId {} to trip with id {}",
+                request.getAccountId(), request.getTripId());
+
+        TripMember result = tripAccountService.addTripMember(
+                request.getTripId(), request.getAccountId(), request.getRoleCode()
+        );
+
+        return ResponseEntity.created(new URI("/api/trips/" + request.getTripId()))
+                .body(result);
     }
 }
