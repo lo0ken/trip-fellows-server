@@ -121,7 +121,7 @@ public class TripControllerTest {
         toCreate.setId(null);
         Trip created = easyRandom.nextObject(Trip.class);
 
-        when(tripService.save(any())).thenReturn(created);
+        when(tripService.create(any())).thenReturn(created);
 
         mockMvc.perform(post("/api/trips")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -68,9 +68,18 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip save(Trip trip) {
+    public Trip create(Trip trip) {
         trip.setStatus(tripStatusService.findByCode(TripStatusCodeEnum.WAITING));
 
+        return save(trip);
+    }
+
+    @Override
+    public Trip update(Trip trip) {
+        return save(trip);
+    }
+
+    private Trip save(Trip trip) {
         saveEndPoints(trip);
 
         TripEntity saved = tripRepository.save(tripMapper.map(trip));
