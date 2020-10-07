@@ -52,14 +52,14 @@ class TripStatusControllerTest {
 
         when(tripStatusService.updateTripStatus(any(), any())).thenReturn(of(trip));
 
-        mockMvc.perform(put("/api/trip-status", trip.getId(), tripStatus)
+        mockMvc.perform(put("/api/trip-status")
                 .param("tripId", trip.getId().toString())
-                .param("status", tripStatus.toString()))
+                .param("status", tripStatus.getValue()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.code").value(trip.getStatus().getCode().getValue()));
 
-        verify(tripStatusService, atLeastOnce()).updateTripStatus(trip.getId(), tripStatus);
+        verify(tripStatusService).updateTripStatus(trip.getId(), tripStatus);
     }
 
     @Test
@@ -69,12 +69,12 @@ class TripStatusControllerTest {
 
         when(tripStatusService.updateTripStatus(any(), any())).thenReturn(empty());
 
-        mockMvc.perform(put("/api/trip-status", tripId, tripStatus)
-                .param("tripId", String.valueOf(tripId))
-                .param("status", tripStatus.toString()))
+        mockMvc.perform(put("/api/trip-status")
+                .param("tripId", tripId.toString())
+                .param("status", tripStatus.getValue()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$").doesNotExist());
 
-        verify(tripStatusService, atLeastOnce()).updateTripStatus(tripId, tripStatus);
+        verify(tripStatusService).updateTripStatus(tripId, tripStatus);
     }
 }
