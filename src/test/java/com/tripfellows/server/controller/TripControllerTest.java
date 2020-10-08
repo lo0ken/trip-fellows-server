@@ -140,20 +140,4 @@ public class TripControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
     }
-
-    @Test
-    public void addMemberTest() throws Exception {
-        EasyRandom easyRandom = new EasyRandom();
-        AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
-        TripMember created = easyRandom.nextObject(TripMember.class);
-
-        when(tripAccountService.addTripMember(request.getTripId(), request.getAccountId(), request.getRoleCode()))
-                .thenReturn(created);
-
-        mockMvc.perform(post("/api/trips/addMember")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$").isNotEmpty());
-    }
 }
