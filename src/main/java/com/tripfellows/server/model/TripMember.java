@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Getter @Setter
 @NoArgsConstructor
 public class TripMember implements Serializable {
+    private Integer id;
     private Account account;
     private Role role;
 

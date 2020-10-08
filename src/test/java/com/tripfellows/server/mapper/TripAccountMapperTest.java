@@ -24,4 +24,16 @@ public class TripAccountMapperTest {
         assertEquals(tripMember.getAccount().getId(), entity.getAccount().getId());
         assertEquals(tripMember.getRole().getId(), entity.getRole().getId());
     }
+
+    @Test
+    public void tripAccountEntityToDtoConversion() {
+        EasyRandom easyRandom = new EasyRandom();
+        TripAccountEntity entity = easyRandom.nextObject(TripAccountEntity.class);
+
+        TripMember member = tripAccountMapper.map(entity);
+
+        assertEquals(entity.getId(), member.getId());
+        assertEquals(entity.getAccount().getId(), member.getAccount().getId());
+        assertEquals(entity.getRole().getCode(), member.getRole().getCode());
+    }
 }
