@@ -63,6 +63,9 @@ public class TripMemberControllerTest {
                 .content(objectMapper.writeValueAsBytes(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty());
+
+        verify(tripAccountService).addTripMember(request.getTripId(), request.getAccountId(),
+                request.getRoleCode());
     }
 
     @Test
