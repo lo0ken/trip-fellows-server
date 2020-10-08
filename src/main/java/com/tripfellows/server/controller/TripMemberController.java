@@ -42,6 +42,12 @@ public class TripMemberController {
                 .body(result);
     }
 
+    /**
+     * DELETE /api/trip-members/removeMember/:tripMemberId : remove member from trip
+     *
+     * @param tripMemberId id of trip member to delete
+     * @return the ResponseEntity with status 201 (Created) with empty body
+     */
     @DeleteMapping("/removeMember/{tripMemberId}")
     public ResponseEntity<Void> removeMember(@PathVariable Integer tripMemberId) {
         log.debug("REST request to delete trip member with id : {}", tripMemberId);
