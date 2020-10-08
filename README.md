@@ -11,6 +11,7 @@
 * Flyway
 * Postgres
 * JUnit
+* Mockito
 * Lombok
 * MapStruct
 * EasyRandom

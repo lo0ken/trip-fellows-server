@@ -26,4 +26,10 @@ public interface TripAccountService {
      * @return the new member of trip
      */
     TripMember addTripMember(Integer tripId, Integer accountId, RoleCodeEnum roleCode);
+
+    /**
+     * Delete trip member from trip (trip_account table)
+     * @param tripMemberId id of trip member which is equals to id in trip_account table
+     */
+    void removeTripMember(Integer tripMemberId);
 }

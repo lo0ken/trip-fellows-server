@@ -86,4 +86,13 @@ public class TripAccountServiceTest {
         assertThat(result.getRole().getId()).isEqualTo(role.getId());
         assertThat(result.getAccount().getId()).isEqualTo(accountId);
     }
+
+    @Test
+    public void removeMemberTest() {
+        Integer tripMemberId = new EasyRandom().nextInt();
+
+        tripAccountService.removeTripMember(tripMemberId);
+
+        verify(tripAccountRepository).deleteById(tripMemberId);
+    }
 }

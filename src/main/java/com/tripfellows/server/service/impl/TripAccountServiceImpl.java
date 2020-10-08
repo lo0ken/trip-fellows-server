@@ -56,4 +56,10 @@ public class TripAccountServiceImpl implements TripAccountService {
 
         return tripAccountMapper.map(saved);
     }
+
+    @Override
+    public void removeTripMember(Integer tripMemberId) {
+        log.debug("Deleting trip member from trip_account table with id : {}", tripMemberId);
+        tripAccountRepository.deleteById(tripMemberId);
+    }
 }
