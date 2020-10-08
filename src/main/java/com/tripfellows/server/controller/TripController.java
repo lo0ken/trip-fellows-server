@@ -1,9 +1,6 @@
 package com.tripfellows.server.controller;
 
 import com.tripfellows.server.model.Trip;
-import com.tripfellows.server.model.TripMember;
-import com.tripfellows.server.model.request.AddMemberRequest;
-import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +23,8 @@ public class TripController {
 
     private final TripService tripService;
 
-    private final TripAccountService tripAccountService;
-
-    public TripController(TripService tripService, TripAccountService tripAccountService) {
+    public TripController(TripService tripService) {
         this.tripService = tripService;
-        this.tripAccountService = tripAccountService;
     }
 
     /**
