@@ -6,10 +6,7 @@ import com.tripfellows.server.service.api.TripAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,5 +40,14 @@ public class TripMemberController {
 
         return ResponseEntity.created(new URI("/api/trips/" + request.getTripId()))
                 .body(result);
+    }
+
+    @DeleteMapping("/removeMember/{tripMemberId}")
+    public ResponseEntity<Void> removeMember(@PathVariable Integer tripMemberId) {
+        log.debug("REST request to delete trip member with id : {}", tripMemberId);
+
+        tripAccountService.removeTripMember(tripMemberId);
+
+        return ResponseEntity.ok().build();
     }
 }
