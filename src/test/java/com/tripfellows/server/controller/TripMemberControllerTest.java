@@ -19,7 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +41,8 @@ public class TripMemberControllerTest {
 
     ObjectMapper objectMapper;
 
+    EasyRandom easyRandom = new EasyRandom();
+
     @Before
     public void configureObjectMapper() {
         objectMapper = new ObjectMapper();
@@ -48,7 +52,6 @@ public class TripMemberControllerTest {
 
     @Test
     public void addMemberTest() throws Exception {
-        EasyRandom easyRandom = new EasyRandom();
         AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
         TripMember created = easyRandom.nextObject(TripMember.class);
 
@@ -60,5 +63,15 @@ public class TripMemberControllerTest {
                 .content(objectMapper.writeValueAsBytes(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty());
+    }
+
+    @Test
+    public void removeMemberTest() throws Exception {
+        Integer idToDelete = easyRandom.nextInt();
+
+        mockMvc.perform(delete("/api/trip-members/removeMember/{id}", idToDelete))
+                .andExpect(status().isOk());
+
+        verify(tripAccountService).removeTripMember(idToDelete);
     }
 }
