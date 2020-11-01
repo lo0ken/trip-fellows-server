@@ -2,6 +2,7 @@ package com.tripfellows.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripfellows.server.model.Account;
+import com.tripfellows.server.security.AuthProvider;
 import com.tripfellows.server.service.api.AccountService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,9 +31,13 @@ public class AccountControllerTest {
     @MockBean
     AccountService accountService;
 
+    @MockBean
+    AuthProvider authProvider;
+
     EasyRandom easyRandom = new EasyRandom();
 
     @Test
+    @WithMockUser
     public void getAccountWhenExistsTest() throws Exception {
         Account account = easyRandom.nextObject(Account.class);
 
@@ -44,6 +50,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAccountWhenNotExistsTest() throws Exception {
         Integer existsId = 1;
         Integer notExistsId = 2;
@@ -59,6 +66,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createAccountTest() throws Exception {
         EasyRandom easyRandom = new EasyRandom();
         Account toCreate = easyRandom.nextObject(Account.class);
@@ -78,6 +86,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createAccountWithExistingId() throws Exception {
         Account account = new EasyRandom().nextObject(Account.class);
 
@@ -89,6 +98,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void checkAccountIsRequired() throws Exception {
         mockMvc.perform(post("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,6 +108,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateAccountTest() throws Exception {
         Account account = new EasyRandom().nextObject(Account.class);
 
@@ -111,6 +122,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateNonExistingAccountTest() throws Exception {
         EasyRandom easyRandom = new EasyRandom();
 
@@ -128,6 +140,7 @@ public class AccountControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void deleteAccountTest() throws Exception {
         Integer idToDelete = easyRandom.nextInt();
 

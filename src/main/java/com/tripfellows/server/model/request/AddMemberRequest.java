@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class AddMemberRequest {
-    Integer tripId;
-    Integer accountId;
-    RoleCodeEnum roleCode;
+    private Integer tripId;
+    private Integer accountId;
+    private RoleCodeEnum roleCode;
 }
