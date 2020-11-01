@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.security.AuthProvider;
 import com.tripfellows.server.service.api.TripStatusService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,6 +33,9 @@ class TripStatusControllerTest {
     MockMvc mockMvc;
 
     @MockBean
+    AuthProvider authProvider;
+
+    @MockBean
     TripStatusService tripStatusService;
 
     EasyRandom easyRandom = new EasyRandom();
@@ -45,6 +50,7 @@ class TripStatusControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateStatusWhenTripExists() throws Exception {
         Trip trip = easyRandom.nextObject(Trip.class);
         trip.setId(1);
@@ -63,6 +69,7 @@ class TripStatusControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateStatusWhenTripNotExists() throws Exception {
         Integer tripId = 1;
         TripStatusCodeEnum tripStatus = easyRandom.nextObject(TripStatusCodeEnum.class);

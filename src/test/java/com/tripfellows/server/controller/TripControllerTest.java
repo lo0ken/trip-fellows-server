@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.security.AuthProvider;
 import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -40,6 +42,9 @@ public class TripControllerTest {
     TripService tripService;
 
     @MockBean
+    AuthProvider authProvider;
+
+    @MockBean
     TripAccountService tripAccountService;
 
     EasyRandom easyRandom = new EasyRandom();
@@ -54,6 +59,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getTripWhenExistsTest() throws Exception {
         Trip trip = easyRandom.nextObject(Trip.class);
 
@@ -66,6 +72,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getTripWhenNotExistsTest() throws Exception {
         Integer existsId = 1;
         Integer notExistsId = 2;
@@ -81,6 +88,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getTripsByAccountWhenNotEmptyTest() throws Exception {
         Integer accountId = 1;
         int quantity = 10;
@@ -98,6 +106,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getTripsByAccountWhenEmptyTest() throws Exception {
         Integer accountId = 1;
         int quantity = 0;
@@ -113,6 +122,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createTripTest() throws Exception {
         EasyRandom easyRandom = new EasyRandom();
         Trip toCreate = easyRandom.nextObject(Trip.class);
@@ -129,6 +139,7 @@ public class TripControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createTripWithExistingId() throws Exception {
         Trip trip = new EasyRandom().nextObject(Trip.class);
 

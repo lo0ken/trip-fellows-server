@@ -6,7 +6,7 @@
   
 ## Используемые технологии
 * Java
-* Spring (Spring Boot, Spring Data)
+* Spring (Spring Boot, Spring Data, Spring Security)
 * Hibernate
 * Flyway
 * Postgres
