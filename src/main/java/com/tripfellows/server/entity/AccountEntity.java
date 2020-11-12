@@ -17,6 +17,9 @@ public class AccountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "uid", nullable = false, length = 500)
+    private String uid;
+
     @Column(name = "name", nullable = false, length = 500)
     private String name;
 
