@@ -16,6 +16,7 @@
 * MapStruct
 * EasyRandom
 * Swagger
+* Firebase
 
 ## Swagger
 Документация по api доступна по адресу `http://34.212.175.163/swagger-ui.html`
