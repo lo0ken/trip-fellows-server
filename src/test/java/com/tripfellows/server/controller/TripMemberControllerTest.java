@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.model.request.AddMemberRequest;
-import com.tripfellows.server.security.AuthProvider;
 import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
@@ -36,9 +35,6 @@ public class TripMemberControllerTest {
 
     @MockBean
     TripService tripService;
-
-    @MockBean
-    AuthProvider authProvider;
 
     @MockBean
     TripAccountService tripAccountService;

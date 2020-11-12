@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.model.Trip;
-import com.tripfellows.server.security.AuthProvider;
 import com.tripfellows.server.service.api.TripStatusService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Before;
@@ -31,9 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TripStatusControllerTest {
     @Autowired
     MockMvc mockMvc;
-
-    @MockBean
-    AuthProvider authProvider;
 
     @MockBean
     TripStatusService tripStatusService;
