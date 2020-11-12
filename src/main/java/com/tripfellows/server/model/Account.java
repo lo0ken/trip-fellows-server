@@ -12,6 +12,7 @@ public class Account extends IdModel {
     private String phoneNumber;
 
     public Account(String uid, String name, String phoneNumber) {
+        this.uid = uid;
         this.name = name;
         this.phoneNumber = phoneNumber;
     }
