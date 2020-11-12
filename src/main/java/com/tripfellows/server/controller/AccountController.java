@@ -1,7 +1,9 @@
 package com.tripfellows.server.controller;
 
 import com.tripfellows.server.model.Account;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.AccountService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +18,14 @@ import static java.util.Objects.isNull;
  * REST controller for managing accounts
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
 
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private final SecurityService securityService;
 
     /**
      * GET /api/accounts/:id : get the account with specified id
@@ -55,6 +56,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(null);
         }
 
+        account.setUid(securityService.getAuthenticatedUserUid());
         Account result = accountService.save(account);
         return ResponseEntity.created(new URI("/api/accounts/" + result.getId()))
                 .body(result);
