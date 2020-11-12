@@ -2,9 +2,10 @@ package com.tripfellows.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripfellows.server.model.Account;
-import com.tripfellows.server.security.AuthProvider;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.AccountService;
 import org.jeasy.random.EasyRandom;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -32,9 +34,15 @@ public class AccountControllerTest {
     AccountService accountService;
 
     @MockBean
-    AuthProvider authProvider;
+    SecurityService securityService;
 
     EasyRandom easyRandom = new EasyRandom();
+
+    @Before
+    public void setUp() {
+        when(securityService.getAuthenticatedUserUid())
+                .thenReturn(easyRandom.nextObject(String.class));
+    }
 
     @Test
     @WithMockUser
@@ -71,7 +79,7 @@ public class AccountControllerTest {
         EasyRandom easyRandom = new EasyRandom();
         Account toCreate = easyRandom.nextObject(Account.class);
         toCreate.setId(null);
-        Account created = new Account(toCreate.getName(), toCreate.getPhoneNumber());
+        Account created = new Account(toCreate.getUid(), toCreate.getName(), toCreate.getPhoneNumber());
         created.setId(1);
 
         when(accountService.save(toCreate)).thenReturn(created);
@@ -81,6 +89,7 @@ public class AccountControllerTest {
                 .content(new ObjectMapper().writeValueAsBytes(toCreate)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(created.getId()))
+                .andExpect(jsonPath("$.uid").value(created.getUid()))
                 .andExpect(jsonPath("$.name").value(created.getName()))
                 .andExpect(jsonPath("$.phoneNumber").value(created.getPhoneNumber()));
     }
@@ -105,6 +114,23 @@ public class AccountControllerTest {
                 .content(new ObjectMapper().writeValueAsBytes(null)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    @WithMockUser
+    public void checkSetUidWhenCreateAccount() throws Exception {
+        Account someAccount = new EasyRandom().nextObject(Account.class);
+        someAccount.setUid(null);
+        someAccount.setId(null);
+
+        when(accountService.save(someAccount)).thenReturn(someAccount);
+
+        mockMvc.perform(post("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(someAccount)))
+                .andExpect(status().isCreated());
+
+        verify(accountService).save(argThat(account -> Objects.nonNull(account.getUid())));
     }
 
     @Test
