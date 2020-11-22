@@ -1,7 +1,9 @@
 package com.tripfellows.server.controller;
 
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.TripService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +21,12 @@ import static java.util.Objects.isNull;
 @Slf4j
 @RestController
 @RequestMapping("/api/trips")
+@RequiredArgsConstructor
 public class TripController {
 
-    private final TripService tripService;
+    private final SecurityService securityService;
 
-    public TripController(TripService tripService) {
-        this.tripService = tripService;
-    }
+    private final TripService tripService;
 
     /**
      * GET  /api/trips/:id : get the "id" trip.
@@ -70,6 +71,8 @@ public class TripController {
         if (!isNull(trip.getId())) {
             return ResponseEntity.badRequest().body(null);
         }
+
+        trip.setCreator(securityService.getCurrentAccount());
 
         Trip result = tripService.create(trip);
         return ResponseEntity.created(new URI("/api/trips/" + result.getId()))

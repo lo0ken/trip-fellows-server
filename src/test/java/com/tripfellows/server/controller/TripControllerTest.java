@@ -3,13 +3,16 @@ package com.tripfellows.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.tripfellows.server.model.Account;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,6 +28,8 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,6 +41,9 @@ public class TripControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    SecurityService securityService;
 
     @MockBean
     TripService tripService;
@@ -144,5 +152,29 @@ public class TripControllerTest {
                 .content(objectMapper.writeValueAsBytes(trip)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    @WithMockUser
+    public void setAccountWhenCreateTest() throws Exception {
+        EasyRandom easyRandom = new EasyRandom();
+        Trip toCreate = easyRandom.nextObject(Trip.class);
+        toCreate.setId(null);
+        toCreate.setCreator(null);
+        Trip created = easyRandom.nextObject(Trip.class);
+
+        Account currentAccount = easyRandom.nextObject(Account.class);
+
+        when(tripService.create(any())).thenReturn(created);
+        when(securityService.getCurrentAccount()).thenReturn(currentAccount);
+
+        mockMvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(toCreate)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.creator").isNotEmpty());
+
+        verify(securityService).getCurrentAccount();
+        verify(tripService).create(argThat(t -> t.getCreator().getUid().equals(currentAccount.getUid())));
     }
 }

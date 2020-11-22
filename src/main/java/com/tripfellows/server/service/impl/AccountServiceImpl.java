@@ -39,6 +39,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Optional<Account> findByUid(String uid) {
+        log.debug("Retrieving account with uid {}", uid);
+        Optional<AccountEntity> accountEntityOptional = accountRepository.findByUid(uid);
+
+        return accountEntityOptional.map(accountMapper::map);
+    }
+
+    @Override
     public Account save(Account account) {
         AccountEntity saved = accountRepository.save(accountMapper.map(account));
         log.debug("Account with id {} has been saved", saved.getId());
