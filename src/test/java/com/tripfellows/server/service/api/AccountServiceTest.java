@@ -57,6 +57,27 @@ public class AccountServiceTest {
     }
 
     @Test
+    public void findByUidTest() throws JsonProcessingException {
+        AccountEntity saved = new EasyRandom().nextObject(AccountEntity.class);
+
+        when(accountRepository.findByUid(saved.getUid())).thenReturn(Optional.of(saved));
+
+        Optional<Account> account = accountService.findByUid(saved.getUid());
+
+        assertTrue(account.isPresent());
+
+        ObjectWriter writer = new ObjectMapper().writerWithDefaultPrettyPrinter();
+        assertEquals(writer.writeValueAsString(accountMapper.map(saved)), writer.writeValueAsString(account.get()));
+    }
+
+    @Test
+    public void findByUidNotExistTest() {
+        when(accountRepository.findByUid(any())).thenReturn(Optional.empty());
+        Optional<Account> account = accountService.findByUid("qwerty");
+        assertFalse(account.isPresent());
+    }
+
+    @Test
     public void saveTest() throws JsonProcessingException {
         Account account = new EasyRandom().nextObject(Account.class);
 

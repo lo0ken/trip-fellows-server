@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,6 +73,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public Trip create(Trip trip) {
         trip.setStatus(tripStatusService.findByCode(TripStatusCodeEnum.WAITING));
+        trip.setCreateDate(LocalDateTime.now());
 
         return save(trip);
     }
@@ -83,10 +87,14 @@ public class TripServiceImpl implements TripService {
         saveEndPoints(trip);
 
         TripEntity saved = tripRepository.save(tripMapper.map(trip));
-        List<TripMember> members = tripAccountService.saveAll(saved.getId(), trip.getMembers());
+
+        List<TripMember> tripMembers = Collections.emptyList();
+        if (!CollectionUtils.isEmpty(trip.getMembers())) {
+            tripMembers = tripAccountService.saveAll(saved.getId(), trip.getMembers());
+        }
 
         Trip result = tripMapper.map(saved);
-        result.setMembers(members);
+        result.setMembers(tripMembers);
 
         log.debug("Account with id {} has been saved", saved.getId());
         return result;
