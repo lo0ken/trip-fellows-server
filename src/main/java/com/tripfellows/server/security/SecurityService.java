@@ -1,19 +1,19 @@
 package com.tripfellows.server.security;
 
-import com.google.firebase.auth.FirebaseToken;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
+import com.tripfellows.server.model.Account;
 
-@Slf4j
-@Service
-public class SecurityService {
+public interface SecurityService {
+    /**
+     * Get authenticated account uid from SecurityContextHolder
+     *
+     * @return authenticated account uid
+     */
+    String getAuthenticatedUserUid();
 
-    public String getAuthenticatedUserUid() {
-        FirebaseToken token = (FirebaseToken) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        return token.getUid();
-    }
+    /**
+     * Retrieving account from database with current authenticated user uid
+     *
+     * @return account of authenticated user
+     */
+    Account getCurrentAccount();
 }
