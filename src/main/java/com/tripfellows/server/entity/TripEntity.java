@@ -40,7 +40,7 @@ public class TripEntity {
     @Column(name = "start_dt", nullable = false)
     private LocalDateTime startDate;
 
-    @Column(name = "end_dt", nullable = false)
+    @Column(name = "end_dt")
     private LocalDateTime endDate;
 
     @Column(name = "comment", length = 500)

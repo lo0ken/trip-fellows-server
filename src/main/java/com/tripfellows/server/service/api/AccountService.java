@@ -14,6 +14,13 @@ public interface AccountService {
     Optional<Account> findById(Integer id);
 
     /**
+     * Retrieve account from database
+     * @param uid account uid to retrieve
+     * @return Optional with body the account or Optional.empty
+     */
+    Optional<Account> findByUid(String uid);
+
+    /**
      * Update all information for a specific account, and return the modified account
      * Or create it if not exists
      *
