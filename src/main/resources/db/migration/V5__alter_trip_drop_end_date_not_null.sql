@@ -1,0 +1,1 @@
+alter table trip alter column end_dt drop not null;

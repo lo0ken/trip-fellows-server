@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class TripServiceTest {
     @Mock
     TripRepository tripRepository;
@@ -142,6 +142,20 @@ public class TripServiceTest {
                 argThat(members -> members.containsAll(trip.getMembers())));
 
         assertThat(result.getMembers()).containsAll(trip.getMembers());
+    }
+
+    @Test
+    public void checkDoesNotSaveMembersWhenNullTest() {
+        Trip trip = new EasyRandom().nextObject(Trip.class);
+        trip.setMembers(null);
+        TripEntity tripEntity = tripMapper.map(trip);
+
+        when(tripRepository.save(any())).thenReturn(tripEntity);
+
+        Trip result = tripService.create(trip);
+
+        verify(tripAccountService, never()).saveAll(any(), any());
+        assertThat(result.getMembers()).hasSize(0);
     }
 
     @Test
