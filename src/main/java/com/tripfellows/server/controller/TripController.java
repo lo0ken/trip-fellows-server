@@ -58,6 +58,20 @@ public class TripController {
     }
 
     /**
+     * GET /api/trips : get all trips
+     *
+     * @return response entity with status 200 (OK) and body the list of all trips
+     */
+    @GetMapping
+    public ResponseEntity<List<Trip>> getAllTrips() {
+        log.debug("REST request to get all trips");
+
+        List<Trip> all = tripService.findAll();
+
+        return ResponseEntity.ok(all);
+    }
+
+    /**
      * POST /api/trips : create a new trip
      *
      * @param trip the trip to create
