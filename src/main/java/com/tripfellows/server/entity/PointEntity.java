@@ -16,11 +16,11 @@ public class PointEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "x", nullable = false)
-    private Double x;
+    @Column(name = "latitude", nullable = false)
+    private Double latitude;
 
-    @Column(name = "y", nullable = false)
-    private Double y;
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
 
     @Column(name = "address", nullable = false, length = 500)
     private String address;

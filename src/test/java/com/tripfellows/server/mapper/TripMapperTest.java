@@ -29,8 +29,8 @@ public class TripMapperTest {
         Trip actualDto = mapper.map(entity);
 
         assertEquals(expectedDto.getId(), actualDto.getId());
-        assertEquals(writer.writeValueAsString(expectedDto.getStartPoint()), writer.writeValueAsString(actualDto.getStartPoint()));
-        assertEquals(writer.writeValueAsString(expectedDto.getEndPoint()), writer.writeValueAsString(actualDto.getEndPoint()));
+        assertEquals(writer.writeValueAsString(expectedDto.getDepartureAddress()), writer.writeValueAsString(actualDto.getDepartureAddress()));
+        assertEquals(writer.writeValueAsString(expectedDto.getDestinationAddress()), writer.writeValueAsString(actualDto.getDestinationAddress()));
         assertEquals(writer.writeValueAsString(expectedDto.getPrice()), writer.writeValueAsString(actualDto.getPrice()));
         assertEquals(writer.writeValueAsString(expectedDto.getCreator()), writer.writeValueAsString(actualDto.getCreator()));
         assertEquals(writer.writeValueAsString(expectedDto.getCreateDate()), writer.writeValueAsString(actualDto.getCreateDate()));
