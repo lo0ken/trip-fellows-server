@@ -105,6 +105,22 @@ public class TripServiceTest {
     }
 
     @Test
+    public void findAllTripsTest() {
+        List<TripEntity> expectedTrips = new EasyRandom().objects(TripEntity.class, 10).collect(toList());
+        when(tripRepository.findAll()).thenReturn(expectedTrips);
+
+        List<Trip> result = tripService.findAll();
+
+        assertThat(result).hasSize(expectedTrips.size());
+    }
+
+    @Test
+    public void findAllWhenEmptyTest() {
+        when(tripRepository.findAll()).thenReturn(Collections.emptyList());
+        assertThat(tripService.findAll()).hasSize(0);
+    }
+
+    @Test
     public void checkStatusWaitingTest() {
         TripStatus finishedStatus = new TripStatus(TripStatusCodeEnum.FINISHED, "");
         TripStatus waitingStatus = new TripStatus(TripStatusCodeEnum.WAITING, "");
@@ -163,15 +179,15 @@ public class TripServiceTest {
         EasyRandom easyRandom = new EasyRandom();
         Trip trip = easyRandom.nextObject(Trip.class);
 
-        Point startPoint = trip.getStartPoint();
+        Point startPoint = trip.getDepartureAddress();
         startPoint.setId(null);
-        Point endPoint = trip.getEndPoint();
+        Point endPoint = trip.getDestinationAddress();
         endPoint.setId(null);
 
-        Point startPointWithId = new Point(startPoint.getX(), startPoint.getY(), startPoint.getAddress());
+        Point startPointWithId = new Point(startPoint.getLatitude(), startPoint.getLongitude(), startPoint.getAddress());
         startPointWithId.setId(easyRandom.nextInt());
 
-        Point endPointWithId = new Point(endPoint.getX(), endPoint.getY(), endPoint.getAddress());
+        Point endPointWithId = new Point(endPoint.getLatitude(), endPoint.getLongitude(), endPoint.getAddress());
         endPointWithId.setId(easyRandom.nextInt());
 
         TripEntity tripEntity = tripMapper.map(trip);
