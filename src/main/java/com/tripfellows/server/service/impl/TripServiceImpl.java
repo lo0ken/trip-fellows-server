@@ -21,9 +21,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Service for Trips
@@ -67,7 +67,16 @@ public class TripServiceImpl implements TripService {
 
         return trips.stream()
                 .map(tripMapper::map)
-                .collect(Collectors.toList());
+                .collect(toList());
+    }
+
+    @Override
+    public List<Trip> findAll() {
+        log.debug("Retrieving all trips");
+
+        return tripRepository.findAll().stream()
+                .map(tripMapper::map)
+                .collect(toList());
     }
 
     @Override
@@ -101,15 +110,15 @@ public class TripServiceImpl implements TripService {
     }
 
     private void saveEndPoints(Trip trip) {
-        Point startPoint = trip.getStartPoint();
-        Point endPoint = trip.getEndPoint();
+        Point startPoint = trip.getDepartureAddress();
+        Point endPoint = trip.getDestinationAddress();
 
         if (isNull(startPoint.getId())) {
-            trip.setStartPoint(pointService.save(startPoint));
+            trip.setDepartureAddress(pointService.save(startPoint));
         }
 
         if (isNull(endPoint.getId())) {
-            trip.setEndPoint(pointService.save(endPoint));
+            trip.setDestinationAddress(pointService.save(endPoint));
         }
     }
 }

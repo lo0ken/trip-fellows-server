@@ -24,6 +24,13 @@ public interface TripService {
     List<Trip> findByAccountId(Integer accountId);
 
     /**
+     * Retrieve all trips from database
+     *
+     * @return list of all trips
+     */
+    List<Trip> findAll();
+
+    /**
      * Save all information for a specific trip, and return the created trip
      *
      * @param trip trip to create

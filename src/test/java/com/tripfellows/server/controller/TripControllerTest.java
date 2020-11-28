@@ -93,6 +93,19 @@ public class TripControllerTest {
 
     @Test
     @WithMockUser
+    public void getAllTripsTest() throws Exception {
+        List<Trip> expected = easyRandom.objects(Trip.class, 10).collect(toList());
+
+        when(tripService.findAll()).thenReturn(expected);
+
+        mockMvc.perform(get("/api/trips"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(expected.size())));
+    }
+
+    @Test
+    @WithMockUser
     public void getTripsByAccountWhenNotEmptyTest() throws Exception {
         Integer accountId = 1;
         int quantity = 10;
