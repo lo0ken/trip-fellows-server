@@ -13,8 +13,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class Trip implements Serializable {
     private Integer id;
-    private Point startPoint;
-    private Point endPoint;
+    private Point departureAddress;
+    private Point destinationAddress;
     private BigDecimal price;
     private Account creator;
     private LocalDateTime createDate;
