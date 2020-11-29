@@ -72,6 +72,20 @@ public class TripController {
     }
 
     /**
+     * GET /api/trips/active : get all trips, which user can join
+     *
+     * @return response entity with status 200 (OK) and body the list of active trips
+     */
+    @GetMapping("/active")
+    public ResponseEntity<List<Trip>> getActiveTrips() {
+        log.debug("REST request to get all trips");
+
+        List<Trip> allActive = tripService.findAllActive();
+
+        return ResponseEntity.ok(allActive);
+    }
+
+    /**
      * POST /api/trips : create a new trip
      *
      * @param trip the trip to create
