@@ -3,8 +3,11 @@ package com.tripfellows.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.model.Account;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.model.request.AddMemberRequest;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
@@ -37,6 +40,9 @@ public class TripMemberControllerTest {
     TripService tripService;
 
     @MockBean
+    SecurityService securityService;
+
+    @MockBean
     TripAccountService tripAccountService;
 
     ObjectMapper objectMapper;
@@ -56,7 +62,11 @@ public class TripMemberControllerTest {
         AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
         TripMember created = easyRandom.nextObject(TripMember.class);
 
-        when(tripAccountService.addTripMember(request.getTripId(), request.getAccountId(), request.getRoleCode()))
+        Account account = easyRandom.nextObject(Account.class);
+
+        when(securityService.getCurrentAccount()).thenReturn(account);
+
+        when(tripAccountService.addTripMember(request.getTripId(), account.getId(), RoleCodeEnum.PASSENGER))
                 .thenReturn(created);
 
         mockMvc.perform(post("/api/trip-members/addMember")
@@ -65,7 +75,7 @@ public class TripMemberControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty());
 
-        verify(tripAccountService).addTripMember(request.getTripId(), request.getAccountId(),
+        verify(tripAccountService).addTripMember(request.getTripId(), account.getId(),
                 request.getRoleCode());
     }
 
