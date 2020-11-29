@@ -31,6 +31,13 @@ public interface TripService {
     List<Trip> findAll();
 
     /**
+     * Retrieve all active trips from database
+     *
+     * @return list of all trips with status 'WAITING'
+     */
+    List<Trip> findAllActive();
+
+    /**
      * Save all information for a specific trip, and return the created trip
      *
      * @param trip trip to create
