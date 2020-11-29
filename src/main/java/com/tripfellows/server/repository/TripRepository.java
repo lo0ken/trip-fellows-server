@@ -12,5 +12,8 @@ import java.util.List;
 public interface TripRepository extends JpaRepository<TripEntity, Integer> {
 
     @Query("select ta.trip from TripAccountEntity ta where ta.account.id = :accountId")
-    List<TripEntity> findByAccountId (@Param("accountId") Integer accountId);
+    List<TripEntity> findByAccountId(@Param("accountId") Integer accountId);
+
+    @Query("select t from TripEntity t where t.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'WAITING')")
+    List<TripEntity> findAllActive();
 }

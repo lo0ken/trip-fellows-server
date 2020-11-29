@@ -115,6 +115,16 @@ public class TripServiceTest {
     }
 
     @Test
+    public void findAllActiveTripsTest() {
+        List<TripEntity> expectedTrips = new EasyRandom().objects(TripEntity.class, 10).collect(toList());
+        when(tripRepository.findAllActive()).thenReturn(expectedTrips);
+
+        List<Trip> result = tripService.findAllActive();
+
+        assertThat(result).hasSize(expectedTrips.size());
+    }
+
+    @Test
     public void findAllWhenEmptyTest() {
         when(tripRepository.findAll()).thenReturn(Collections.emptyList());
         assertThat(tripService.findAll()).hasSize(0);
