@@ -80,6 +80,15 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public List<Trip> findAllActive() {
+        log.debug("Retrieving all active trips");
+
+        return tripRepository.findAllActive().stream()
+                .map(tripMapper::map)
+                .collect(toList());
+    }
+
+    @Override
     public Trip create(Trip trip) {
         trip.setStatus(tripStatusService.findByCode(TripStatusCodeEnum.WAITING));
         trip.setCreateDate(LocalDateTime.now());
