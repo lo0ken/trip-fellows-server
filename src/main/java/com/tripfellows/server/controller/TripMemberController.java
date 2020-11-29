@@ -1,7 +1,9 @@
 package com.tripfellows.server.controller;
 
+import com.tripfellows.server.enums.RoleCodeEnum;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.model.request.AddMemberRequest;
+import com.tripfellows.server.security.SecurityService;
 import com.tripfellows.server.service.api.TripAccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ public class TripMemberController {
 
     private final TripAccountService tripAccountService;
 
+    private final SecurityService securityService;
+
     /**
      * POST /api/trip-members/addMember : add member to existing trip
      *
@@ -31,11 +35,13 @@ public class TripMemberController {
      */
     @PostMapping("/addMember")
     public ResponseEntity<TripMember> addMember(@RequestBody AddMemberRequest request) throws URISyntaxException {
+        Integer accountId = securityService.getCurrentAccount().getId();
+
         log.debug("REST request to add member with accountId {} to trip with id {}",
-                request.getAccountId(), request.getTripId());
+                accountId, request.getTripId());
 
         TripMember result = tripAccountService.addTripMember(
-                request.getTripId(), request.getAccountId(), request.getRoleCode()
+                request.getTripId(), accountId, RoleCodeEnum.PASSENGER
         );
 
         return ResponseEntity.created(new URI("/api/trips/" + request.getTripId()))
