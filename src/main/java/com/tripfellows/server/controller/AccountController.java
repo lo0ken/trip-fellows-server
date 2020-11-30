@@ -42,6 +42,16 @@ public class AccountController {
     }
 
     /**
+     * GET /api/account/me : get current authenticated account information
+     *
+     * @return the ResponseEntity with the status 200 (OK) and with body the authenticated account
+     */
+    @GetMapping("/me")
+    public ResponseEntity<Account> getCurrentAccount() {
+        return ResponseEntity.ok(securityService.getCurrentAccount());
+    }
+
+    /**
      * POST /api/accounts : Create a new account
      *
      * @param account the account to create
