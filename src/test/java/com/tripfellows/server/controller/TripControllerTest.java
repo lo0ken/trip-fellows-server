@@ -27,8 +27,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -149,6 +148,36 @@ public class TripControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(quantity)));
+    }
+
+    @Test
+    @WithMockUser
+    public void getCurrentTripTest() throws Exception {
+        Account account = easyRandom.nextObject(Account.class);
+        Trip expected = easyRandom.nextObject(Trip.class);
+
+        when(securityService.getCurrentAccount()).thenReturn(account);
+        when(tripService.findCurrentTrip(account.getId()))
+                .thenReturn(Optional.of(expected));
+
+        mockMvc.perform(get("/api/trips/currentTrip"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(expected.getId()));
+    }
+
+    @Test
+    @WithMockUser
+    public void getCurrentTripWhenEmptyTest() throws Exception{
+        Account account = easyRandom.nextObject(Account.class);
+
+        when(securityService.getCurrentAccount()).thenReturn(account);
+        when(tripService.findCurrentTrip(account.getId()))
+                .thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/trips/currentTrip"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 
     @Test

@@ -38,6 +38,17 @@ public interface TripService {
     List<Trip> findAllActive();
 
     /**
+     * Retrieve current user trip from database
+     * Current means:
+     * - if user is a driver, the trip with status WAITING or STARTED
+     * - if user is a passenger, the trip with status STARTED
+     *
+     * @param accountId accountId of user to find current trip
+     * @return optional with current trip of user or optional empty if does not exists
+     */
+    Optional<Trip> findCurrentTrip(Integer accountId);
+
+    /**
      * Save all information for a specific trip, and return the created trip
      *
      * @param trip trip to create
