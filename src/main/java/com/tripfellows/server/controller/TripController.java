@@ -85,6 +85,25 @@ public class TripController {
         return ResponseEntity.ok(allActive);
     }
 
+
+    /**
+     * GET /api/trips/currentTrip : get current trip of user
+     *
+     * @return response entity with status 200 (OK) and body the current trip
+     * or with status 404 (Not found) with empty body if trip does not exists
+     */
+    @GetMapping("/currentTrip")
+    public ResponseEntity<Trip> getCurrentTrip() {
+        Integer accountId = securityService.getCurrentAccount().getId();
+
+        log.debug("REST request to get current trip of user with accountId: {}", accountId);
+
+        Optional<Trip> trip = tripService.findCurrentTrip(accountId);
+
+        return trip.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     /**
      * POST /api/trips : create a new trip
      *

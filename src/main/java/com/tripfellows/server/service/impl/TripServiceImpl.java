@@ -89,6 +89,19 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public Optional<Trip> findCurrentTrip(Integer accountId) {
+        log.debug("Trying to retrieve current trip of user with accountId: {}", accountId);
+
+        Optional<TripEntity> currentDriverTrip = tripRepository.findCurrentDriverTrip(accountId);
+        if (currentDriverTrip.isPresent()) {
+            return Optional.of(tripMapper.map(currentDriverTrip.get()));
+        }
+
+        Optional<TripEntity> currentPassengerTrip = tripRepository.findCurrentPassengerTrip(accountId);
+        return currentPassengerTrip.map(tripMapper::map);
+    }
+
+    @Override
     public Trip create(Trip trip) {
         trip.setStatus(tripStatusService.findByCode(TripStatusCodeEnum.WAITING));
         trip.setCreateDate(LocalDateTime.now());
