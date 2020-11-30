@@ -19,11 +19,13 @@ public interface TripRepository extends JpaRepository<TripEntity, Integer> {
     List<TripEntity> findAllActive();
 
     @Query("select t from TripEntity t where t.creator.id = :accountId and" +
-            " t.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'STARTED')" +
-            " or t.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'WAITING')")
+            " (t.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'STARTED')" +
+            " or t.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'WAITING'))")
     Optional<TripEntity> findCurrentDriverTrip(@Param("accountId") Integer accountId);
 
 
-    @Query("select ts from TripAccountEntity ts where ts.account.id = :accountId and ts.trip.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'STARTED')")
+    @Query("select ts from TripAccountEntity ts where ts.account.id = :accountId and " +
+            "(ts.trip.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'STARTED') " +
+            "or ts.trip.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'WAITING'))")
     Optional<TripEntity> findCurrentPassengerTrip(@Param("accountId") Integer accountId);
 }
