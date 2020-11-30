@@ -131,6 +131,45 @@ public class TripServiceTest {
     }
 
     @Test
+    public void findCurrentWhenDriverTest() {
+        TripEntity trip = new EasyRandom().nextObject(TripEntity.class);
+
+        when(tripRepository.findCurrentDriverTrip(trip.getCreator().getId()))
+                .thenReturn(Optional.of(trip));
+
+        Optional<Trip> tripOptional = tripService.findCurrentTrip(trip.getCreator().getId());
+
+        assertTrue(tripOptional.isPresent());
+        assertEquals(trip.getId(), tripOptional.get().getId());
+    }
+
+    @Test
+    public void findCurrentWhenPassengerTest() {
+        TripEntity trip = new EasyRandom().nextObject(TripEntity.class);
+
+        when(tripRepository.findCurrentDriverTrip(trip.getCreator().getId()))
+                .thenReturn(Optional.empty());
+        when(tripRepository.findCurrentPassengerTrip(trip.getCreator().getId()))
+                .thenReturn(Optional.of(trip));
+
+        Optional<Trip> tripOptional = tripService.findCurrentTrip(trip.getCreator().getId());
+
+        assertTrue(tripOptional.isPresent());
+        assertEquals(trip.getId(), tripOptional.get().getId());
+    }
+
+    @Test
+    public void findCurrentWhenEmptyTest() {
+        when(tripRepository.findCurrentDriverTrip(any()))
+                .thenReturn(Optional.empty());
+        when(tripRepository.findCurrentPassengerTrip(any()))
+                .thenReturn(Optional.empty());
+
+        Optional<Trip> tripOptional = tripService.findCurrentTrip(new EasyRandom().nextInt());
+        assertTrue(tripOptional.isEmpty());
+    }
+
+    @Test
     public void checkStatusWaitingTest() {
         TripStatus finishedStatus = new TripStatus(TripStatusCodeEnum.FINISHED, "");
         TripStatus waitingStatus = new TripStatus(TripStatusCodeEnum.WAITING, "");
