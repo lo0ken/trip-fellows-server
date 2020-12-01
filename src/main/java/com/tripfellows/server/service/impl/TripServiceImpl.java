@@ -160,4 +160,23 @@ public class TripServiceImpl implements TripService {
             trip.setDestinationAddress(pointService.save(endPoint));
         }
     }
+
+    @Override
+    public Integer findAvailablePlacesOfTrip(Integer tripId) {
+        Optional<Trip> trip = findById(tripId);
+
+        if (trip.isEmpty()) {
+            return 0;
+        }
+
+        Integer placesCount = trip.get().getPlacesCount();
+
+        if (trip.get().getMembers() == null) {
+            return placesCount;
+        }
+
+        Integer membersCount = trip.get().getMembers().size();
+
+        return placesCount - membersCount;
+    }
 }
