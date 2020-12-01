@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.model.Account;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.model.request.AddMemberRequest;
@@ -22,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -54,6 +56,8 @@ public class TripMemberControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        when(securityService.getCurrentAccount()).thenReturn(easyRandom.nextObject(Account.class));
     }
 
     @Test
@@ -77,6 +81,20 @@ public class TripMemberControllerTest {
 
         verify(tripAccountService).addTripMember(request.getTripId(), account.getId(),
                 request.getRoleCode());
+    }
+
+    @Test
+    @WithMockUser
+    public void addMemberWhenAlreadyHaveTripTest() throws Exception {
+        AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
+
+        when(tripAccountService.addTripMember(any(), any(), any()))
+                .thenThrow(new PassengerOfAnotherTripException());
+
+        mockMvc.perform(post("/api/trip-members/addMember")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test
