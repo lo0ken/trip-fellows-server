@@ -92,10 +92,25 @@ public class TripServiceImpl implements TripService {
     public Optional<Trip> findCurrentTrip(Integer accountId) {
         log.debug("Trying to retrieve current trip of user with accountId: {}", accountId);
 
-        Optional<TripEntity> currentDriverTrip = tripRepository.findCurrentDriverTrip(accountId);
+        Optional<Trip> currentDriverTrip = findCurrentDriverTrip(accountId);
         if (currentDriverTrip.isPresent()) {
-            return Optional.of(tripMapper.map(currentDriverTrip.get()));
+            return currentDriverTrip;
         }
+
+        return findCurrentPassengerTrip(accountId);
+    }
+
+    @Override
+    public Optional<Trip> findCurrentDriverTrip(Integer accountId) {
+        log.debug("Searching for current trip when user (id: {}) is a driver", accountId);
+
+        Optional<TripEntity> currentDriverTrip = tripRepository.findCurrentDriverTrip(accountId);
+        return currentDriverTrip.map(tripMapper::map);
+    }
+
+    @Override
+    public Optional<Trip> findCurrentPassengerTrip(Integer accountId) {
+        log.debug("Searching for current trip when user (id: {}) is a passenger", accountId);
 
         Optional<TripEntity> currentPassengerTrip = tripRepository.findCurrentPassengerTrip(accountId);
         return currentPassengerTrip.map(tripMapper::map);
@@ -103,6 +118,8 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public Trip create(Trip trip) {
+        log.debug("Creating trip with creator id: {}", trip.getCreator().getId());
+
         trip.setStatus(tripStatusService.findByCode(TripStatusCodeEnum.WAITING));
         trip.setCreateDate(LocalDateTime.now());
 

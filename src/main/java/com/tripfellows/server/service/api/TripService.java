@@ -49,6 +49,22 @@ public interface TripService {
     Optional<Trip> findCurrentTrip(Integer accountId);
 
     /**
+     * Retrieve current user trip if user is a driver of it
+     *
+     * @param accountId accountId of user to find current trip
+     * @return optional with current trip of user or optional empty if does not exists
+     */
+    Optional<Trip> findCurrentDriverTrip(Integer accountId);
+
+    /**
+     * Retrieve current user trip if user is a passenger of it
+     *
+     * @param accountId accountId of user to find current trip
+     * @return optional with current trip of user or optional empty if does not exists
+     */
+    Optional<Trip> findCurrentPassengerTrip(Integer accountId);
+
+    /**
      * Save all information for a specific trip, and return the created trip
      *
      * @param trip trip to create

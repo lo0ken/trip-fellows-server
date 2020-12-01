@@ -31,6 +31,7 @@ public class TripMemberController {
      *
      * @param request request includes tripId, accountId, and roleCode
      * @return the ResponseEntity with status 201 (Created) and with body the new trip member
+     * or ResponseEntity with status 500 (Internal Server Error) if user is already a passenger of another trip
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/addMember")
