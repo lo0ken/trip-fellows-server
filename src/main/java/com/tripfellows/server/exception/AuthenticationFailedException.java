@@ -1,11 +1,8 @@
 package com.tripfellows.server.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class AuthenticationFailedException extends AbstractException {
-    private static final String message = "Authentication failed";
-
-    public AuthenticationFailedException() {
-        super(message, HttpStatus.UNAUTHORIZED);
-    }
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Authentication failed")
+public class AuthenticationFailedException extends RuntimeException {
 }
