@@ -24,7 +24,7 @@ public interface TripRepository extends JpaRepository<TripEntity, Integer> {
     Optional<TripEntity> findCurrentDriverTrip(@Param("accountId") Integer accountId);
 
 
-    @Query("select ts from TripAccountEntity ts where ts.account.id = :accountId and " +
+    @Query("select ts.trip from TripAccountEntity ts where ts.account.id = :accountId and " +
             "(ts.trip.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'STARTED') " +
             "or ts.trip.status.id = (select ts.id from TripStatusEntity ts where ts.code = 'WAITING'))")
     Optional<TripEntity> findCurrentPassengerTrip(@Param("accountId") Integer accountId);
