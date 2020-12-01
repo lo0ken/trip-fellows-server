@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.NoAvailablePlacesFoundException;
 import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.model.Account;
 import com.tripfellows.server.model.TripMember;
@@ -81,6 +82,20 @@ public class TripMemberControllerTest {
 
         verify(tripAccountService).addTripMember(request.getTripId(), account.getId(),
                 request.getRoleCode());
+    }
+
+    @Test
+    @WithMockUser
+    public void addMemberWhenNoAvailablePlacesFoundTest() throws Exception {
+        AddMemberRequest request = easyRandom.nextObject(AddMemberRequest.class);
+
+        when(tripAccountService.addTripMember(any(), any(), any()))
+                .thenThrow(new NoAvailablePlacesFoundException());
+
+        mockMvc.perform(post("/api/trip-members/addMember")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request)))
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

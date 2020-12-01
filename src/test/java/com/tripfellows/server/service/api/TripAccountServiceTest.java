@@ -2,6 +2,7 @@ package com.tripfellows.server.service.api;
 
 import com.tripfellows.server.entity.TripAccountEntity;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.NoAvailablePlacesFoundException;
 import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.mapper.TripAccountMapper;
 import com.tripfellows.server.model.Role;
@@ -81,6 +82,7 @@ public class TripAccountServiceTest {
 
         when(roleService.findByCode(role.getCode())).thenReturn(role);
         when(tripAccountRepository.save(any())).thenReturn(tripAccountEntity);
+        when(tripService.findAvailablePlacesOfTrip(tripId)).thenReturn(1);
 
         TripMember result = tripAccountService.addTripMember(tripId, accountId, RoleCodeEnum.PASSENGER);
 
@@ -93,12 +95,23 @@ public class TripAccountServiceTest {
         assertThat(result.getAccount().getId()).isEqualTo(accountId);
     }
 
+    @Test(expected = NoAvailablePlacesFoundException.class)
+    public void addMemberWhenNoAvailablePlacesFoundTest() {
+        Integer tripId = 1;
+        Integer accountId = 2;
+
+        when(tripService.findAvailablePlacesOfTrip(tripId)).thenReturn(0);
+
+        tripAccountService.addTripMember(tripId, accountId, RoleCodeEnum.PASSENGER);
+    }
+
     @Test(expected = PassengerOfAnotherTripException.class)
     public void passengerOfAnotherTripTest() {
         Integer accountId = 10;
 
         when(tripService.findCurrentTrip(accountId))
                 .thenReturn(Optional.of(Trip.builder().build()));
+        when(tripService.findAvailablePlacesOfTrip(any())).thenReturn(1);
 
         tripAccountService.addTripMember(1, accountId, RoleCodeEnum.PASSENGER);
     }
