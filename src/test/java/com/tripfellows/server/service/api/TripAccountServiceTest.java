@@ -2,8 +2,10 @@ package com.tripfellows.server.service.api;
 
 import com.tripfellows.server.entity.TripAccountEntity;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.mapper.TripAccountMapper;
 import com.tripfellows.server.model.Role;
+import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.repository.TripAccountRepository;
 import com.tripfellows.server.service.impl.RoleServiceImpl;
@@ -18,6 +20,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,6 +40,9 @@ public class TripAccountServiceTest {
 
     @Mock
     RoleServiceImpl roleService;
+
+    @Mock
+    TripService tripService;
 
     TripAccountMapper tripAccountMapper = Mappers.getMapper(TripAccountMapper.class);
 
@@ -85,6 +91,16 @@ public class TripAccountServiceTest {
 
         assertThat(result.getRole().getId()).isEqualTo(role.getId());
         assertThat(result.getAccount().getId()).isEqualTo(accountId);
+    }
+
+    @Test(expected = PassengerOfAnotherTripException.class)
+    public void passengerOfAnotherTripTest() {
+        Integer accountId = 10;
+
+        when(tripService.findCurrentTrip(accountId))
+                .thenReturn(Optional.of(Trip.builder().build()));
+
+        tripAccountService.addTripMember(1, accountId, RoleCodeEnum.PASSENGER);
     }
 
     @Test
