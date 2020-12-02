@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -24,6 +23,7 @@ import java.util.Optional;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 /**
  * Service for Trips
@@ -117,6 +117,20 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    public Integer findAvailablePlacesOfTrip(Integer tripId) {
+        Optional<Trip> trip = findById(tripId);
+
+        if (trip.isEmpty()) {
+            return 0;
+        }
+
+        Integer placesCount = trip.get().getPlacesCount();
+        Integer membersCount = trip.get().getMembers().size();
+
+        return placesCount - membersCount;
+    }
+
+    @Override
     public Trip create(Trip trip) {
         log.debug("Creating trip with creator id: {}", trip.getCreator().getId());
 
@@ -137,7 +151,7 @@ public class TripServiceImpl implements TripService {
         TripEntity saved = tripRepository.save(tripMapper.map(trip));
 
         List<TripMember> tripMembers = Collections.emptyList();
-        if (!CollectionUtils.isEmpty(trip.getMembers())) {
+        if (!isEmpty(trip.getMembers())) {
             tripMembers = tripAccountService.saveAll(saved.getId(), trip.getMembers());
         }
 

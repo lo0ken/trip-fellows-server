@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import java.util.Optional;
 
@@ -59,7 +58,7 @@ public class TripStatusServiceTest {
         statusEntity.setCode(statusToSet);
 
         when(tripService.findById(saved.getId())).thenReturn(Optional.of(saved));
-        when(tripService.update(any())).thenAnswer((Answer) invocation -> invocation.getArguments()[0]);
+        when(tripService.update(any())).thenAnswer(invocation -> invocation.getArguments()[0]);
         when(tripStatusRepository.findByCode(statusEntity.getCode())).thenReturn(statusEntity);
 
         Optional<Trip> actual = tripStatusService.updateTripStatus(saved.getId(), statusToSet);

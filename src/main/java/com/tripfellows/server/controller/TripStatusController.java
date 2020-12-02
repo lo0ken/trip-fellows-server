@@ -2,7 +2,6 @@ package com.tripfellows.server.controller;
 
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.model.Trip;
-import com.tripfellows.server.service.api.TripService;
 import com.tripfellows.server.service.api.TripStatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
