@@ -11,7 +11,6 @@ import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.mapper.TripMapper;
 import com.tripfellows.server.model.Point;
 import com.tripfellows.server.model.Trip;
-import com.tripfellows.server.model.TripMember;
 import com.tripfellows.server.model.TripStatus;
 import com.tripfellows.server.repository.TripRepository;
 import com.tripfellows.server.service.impl.PointServiceImpl;
@@ -28,11 +27,10 @@ import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,7 +51,6 @@ public class TripServiceTest {
     @Mock
     TripAccountService tripAccountService;
 
-    @Spy
     @InjectMocks
     TripServiceImpl tripService;
 
@@ -131,7 +128,7 @@ public class TripServiceTest {
 
     @Test
     public void findAllWhenEmptyTest() {
-        when(tripRepository.findAll()).thenReturn(Collections.emptyList());
+        when(tripRepository.findAll()).thenReturn(emptyList());
         assertThat(tripService.findAll()).hasSize(0);
     }
 
@@ -224,14 +221,14 @@ public class TripServiceTest {
 
         Trip tripToSave = new EasyRandom().nextObject(Trip.class);
         tripToSave.setStatus(finishedStatus);
-        tripToSave.setMembers(Collections.emptyList());
+        tripToSave.setMembers(emptyList());
 
         TripEntity tripEntity = tripMapper.map(tripToSave);
         tripEntity.setStatus(new TripStatusEntity(1, TripStatusCodeEnum.WAITING, ""));
 
         when(tripStatusService.findByCode(TripStatusCodeEnum.WAITING)).thenReturn(waitingStatus);
         when(tripRepository.save(any())).thenReturn(tripEntity);
-        when(tripAccountService.saveAll(any(), any())).thenReturn(Collections.emptyList());
+        when(tripAccountService.saveAll(any(), any())).thenReturn(emptyList());
 
         Trip tripSaved = tripService.create(tripToSave);
 
@@ -319,15 +316,15 @@ public class TripServiceTest {
         Integer tripId = 1;
         Integer expectedPlacesCount = 1;
 
-        Trip trip = easyRandom.nextObject(Trip.class);
-        trip.setPlacesCount(3);
+        TripEntity entity = easyRandom.nextObject(TripEntity.class);
+        entity.setPlacesCount(3);
 
-        List<TripMember> tripMembers = new ArrayList<>();
-        tripMembers.add(easyRandom.nextObject(TripMember.class));
-        tripMembers.add(easyRandom.nextObject(TripMember.class));
-        trip.setMembers(tripMembers);
+        List<TripAccountEntity> members = new ArrayList<>();
+        members.add(easyRandom.nextObject(TripAccountEntity.class));
+        members.add(easyRandom.nextObject(TripAccountEntity.class));
+        entity.setTripToAccounts(members);
 
-        doReturn(Optional.of(trip)).when(tripService).findById(tripId);
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(entity));
 
         Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
 
@@ -340,15 +337,15 @@ public class TripServiceTest {
         Integer tripId = 1;
         Integer expectedPlacesCount = 3;
 
-        Trip trip = easyRandom.nextObject(Trip.class);
-        trip.setPlacesCount(expectedPlacesCount);
-        trip.setMembers(EMPTY_LIST);
+        TripEntity entity = easyRandom.nextObject(TripEntity.class);
+        entity.setPlacesCount(expectedPlacesCount);
+        entity.setTripToAccounts(emptyList());
 
-        doReturn(Optional.of(trip)).when(tripService).findById(tripId);
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(entity));
 
         Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
 
-        assertEquals(3, availablePlacesCount);
+        assertEquals(expectedPlacesCount, availablePlacesCount);
     }
 
     @Test
@@ -357,15 +354,15 @@ public class TripServiceTest {
         Integer tripId = 1;
         Integer expectedPlacesCount = 0;
 
-        Trip trip = easyRandom.nextObject(Trip.class);
-        trip.setPlacesCount(2);
+        TripEntity entity = easyRandom.nextObject(TripEntity.class);
+        entity.setPlacesCount(2);
 
-        List<TripMember> tripMembers = new ArrayList<>();
-        tripMembers.add(easyRandom.nextObject(TripMember.class));
-        tripMembers.add(easyRandom.nextObject(TripMember.class));
-        trip.setMembers(tripMembers);
+        List<TripAccountEntity> members = new ArrayList<>();
+        members.add(easyRandom.nextObject(TripAccountEntity.class));
+        members.add(easyRandom.nextObject(TripAccountEntity.class));
+        entity.setTripToAccounts(members);
 
-        doReturn(Optional.of(trip)).when(tripService).findById(tripId);
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(entity));
 
         Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
 
