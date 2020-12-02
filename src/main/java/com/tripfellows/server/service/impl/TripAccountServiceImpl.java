@@ -2,6 +2,7 @@ package com.tripfellows.server.service.impl;
 
 import com.tripfellows.server.entity.TripAccountEntity;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.NoAvailablePlacesFoundException;
 import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.mapper.TripAccountMapper;
 import com.tripfellows.server.model.Trip;
@@ -57,6 +58,10 @@ public class TripAccountServiceImpl implements TripAccountService {
     public TripMember addTripMember(Integer tripId, Integer accountId, RoleCodeEnum roleCode) {
         if (isPassengerOfAnotherTrip(accountId)) {
             throw new PassengerOfAnotherTripException();
+        }
+
+        if (tripService.findAvailablePlacesOfTrip(tripId) <= 0) {
+            throw new NoAvailablePlacesFoundException();
         }
 
         Integer roleId = roleService.findByCode(roleCode).getId();

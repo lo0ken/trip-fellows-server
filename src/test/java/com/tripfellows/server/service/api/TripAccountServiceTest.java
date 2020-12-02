@@ -2,6 +2,7 @@ package com.tripfellows.server.service.api;
 
 import com.tripfellows.server.entity.TripAccountEntity;
 import com.tripfellows.server.enums.RoleCodeEnum;
+import com.tripfellows.server.exception.NoAvailablePlacesFoundException;
 import com.tripfellows.server.exception.PassengerOfAnotherTripException;
 import com.tripfellows.server.mapper.TripAccountMapper;
 import com.tripfellows.server.model.Role;
@@ -26,8 +27,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TripAccountServiceTest {
@@ -81,6 +81,7 @@ public class TripAccountServiceTest {
 
         when(roleService.findByCode(role.getCode())).thenReturn(role);
         when(tripAccountRepository.save(any())).thenReturn(tripAccountEntity);
+        when(tripService.findAvailablePlacesOfTrip(tripId)).thenReturn(1);
 
         TripMember result = tripAccountService.addTripMember(tripId, accountId, RoleCodeEnum.PASSENGER);
 
@@ -91,6 +92,16 @@ public class TripAccountServiceTest {
 
         assertThat(result.getRole().getId()).isEqualTo(role.getId());
         assertThat(result.getAccount().getId()).isEqualTo(accountId);
+    }
+
+    @Test(expected = NoAvailablePlacesFoundException.class)
+    public void addMemberWhenNoAvailablePlacesFoundTest() {
+        Integer tripId = 1;
+        Integer accountId = 2;
+
+        when(tripService.findAvailablePlacesOfTrip(tripId)).thenReturn(0);
+
+        tripAccountService.addTripMember(tripId, accountId, RoleCodeEnum.PASSENGER);
     }
 
     @Test(expected = PassengerOfAnotherTripException.class)
