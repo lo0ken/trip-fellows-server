@@ -60,7 +60,7 @@ public class TripAccountServiceImpl implements TripAccountService {
             throw new PassengerOfAnotherTripException();
         }
 
-        if (tripService.findAvailablePlacesOfTrip(tripId) == 0) {
+        if (tripService.findAvailablePlacesOfTrip(tripId) <= 0) {
             throw new NoAvailablePlacesFoundException();
         }
 

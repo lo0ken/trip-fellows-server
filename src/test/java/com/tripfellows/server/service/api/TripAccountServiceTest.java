@@ -27,8 +27,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TripAccountServiceTest {
@@ -111,7 +110,6 @@ public class TripAccountServiceTest {
 
         when(tripService.findCurrentTrip(accountId))
                 .thenReturn(Optional.of(Trip.builder().build()));
-        when(tripService.findAvailablePlacesOfTrip(any())).thenReturn(1);
 
         tripAccountService.addTripMember(1, accountId, RoleCodeEnum.PASSENGER);
     }

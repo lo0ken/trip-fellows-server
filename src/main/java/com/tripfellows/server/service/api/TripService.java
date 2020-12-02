@@ -65,6 +65,14 @@ public interface TripService {
     Optional<Trip> findCurrentPassengerTrip(Integer accountId);
 
     /**
+     * Finds how many available places the given trip has
+     *
+     * @param tripId id of the trip
+     * @return available places of the trip
+     */
+    Integer findAvailablePlacesOfTrip(Integer tripId);
+
+    /**
      * Save all information for a specific trip, and return the created trip
      *
      * @param trip trip to create
@@ -80,12 +88,4 @@ public interface TripService {
      * @return updated trip
      */
     Trip update(Trip trip);
-
-    /**
-     * Finds how many available places the given trip has
-     *
-     * @param tripId id of the trip
-     * @return available places of the trip
-     */
-    Integer findAvailablePlacesOfTrip(Integer tripId);
 }

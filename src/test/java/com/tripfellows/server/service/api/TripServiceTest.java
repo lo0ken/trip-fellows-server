@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.EMPTY_LIST;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -316,6 +317,7 @@ public class TripServiceTest {
     public void checkFindAvailablePlacesOfTrip() {
         EasyRandom easyRandom = new EasyRandom();
         Integer tripId = 1;
+        Integer expectedPlacesCount = 1;
 
         Trip trip = easyRandom.nextObject(Trip.class);
         trip.setPlacesCount(3);
@@ -329,22 +331,44 @@ public class TripServiceTest {
 
         Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
 
-        assertEquals(1, availablePlacesCount);
+        assertEquals(expectedPlacesCount, availablePlacesCount);
     }
 
     @Test
     public void checkFindAvailablePlacesOfTripWhenNoMembers() {
         EasyRandom easyRandom = new EasyRandom();
         Integer tripId = 1;
+        Integer expectedPlacesCount = 3;
 
         Trip trip = easyRandom.nextObject(Trip.class);
-        trip.setPlacesCount(3);
-        trip.setMembers(null);
+        trip.setPlacesCount(expectedPlacesCount);
+        trip.setMembers(EMPTY_LIST);
 
         doReturn(Optional.of(trip)).when(tripService).findById(tripId);
 
         Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
 
         assertEquals(3, availablePlacesCount);
+    }
+
+    @Test
+    public void checkFindAvailablePlacesOfTripWhenNoPlaces() {
+        EasyRandom easyRandom = new EasyRandom();
+        Integer tripId = 1;
+        Integer expectedPlacesCount = 0;
+
+        Trip trip = easyRandom.nextObject(Trip.class);
+        trip.setPlacesCount(2);
+
+        List<TripMember> tripMembers = new ArrayList<>();
+        tripMembers.add(easyRandom.nextObject(TripMember.class));
+        tripMembers.add(easyRandom.nextObject(TripMember.class));
+        trip.setMembers(tripMembers);
+
+        doReturn(Optional.of(trip)).when(tripService).findById(tripId);
+
+        Integer availablePlacesCount = tripService.findAvailablePlacesOfTrip(tripId);
+
+        assertEquals(expectedPlacesCount, availablePlacesCount);
     }
 }
