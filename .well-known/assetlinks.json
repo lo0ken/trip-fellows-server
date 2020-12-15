@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.tripfellows.authorization",
+    "sha256_cert_fingerprints":
+    ["C8:8A:B0:59:B4:CC:06:BB:AF:FF:E9:B7:F5:06:09:6A:20:78:CE:10:01:85:A1:A4:0E:FA:F6:CF:F4:DC:D6:AA"]
+  }
+}]
