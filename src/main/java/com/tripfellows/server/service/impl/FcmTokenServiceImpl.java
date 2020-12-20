@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +22,19 @@ import java.util.Optional;
 public class FcmTokenServiceImpl implements FcmTokenService {
 
     private final AccountFcmTokenRepository fcmTokenRepository;
+
+    @Override
+    public List<String> findByAccountIds(List<Integer> accountIds) {
+        log.debug("Searching fcm tokens of accounts: {}", accountIds);
+        List<String> result = new ArrayList<>();
+
+        for (Integer accountId : accountIds) {
+            Optional<AccountFcmToken> tokenOptional = fcmTokenRepository.findById(accountId);
+            tokenOptional.ifPresent(accountFcmToken -> result.add(accountFcmToken.getFcmToken()));
+        }
+
+        return result;
+    }
 
     @Override
     public void update(Integer accountId, String fcmToken) {

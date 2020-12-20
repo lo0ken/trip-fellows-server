@@ -2,7 +2,9 @@ package com.tripfellows.server.controller;
 
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.service.api.PushNotificationService;
 import com.tripfellows.server.service.api.TripStatusService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +17,12 @@ import java.util.Optional;
 @Slf4j
 @RestController
 @RequestMapping("/api/trip-status")
+@RequiredArgsConstructor
 public class TripStatusController {
 
     private final TripStatusService tripStatusService;
 
-    public TripStatusController(TripStatusService tripStatusService) {
-        this.tripStatusService = tripStatusService;
-    }
+    private final PushNotificationService pushNotificationService;
 
     /**
      * PUT  /api/trip-status : update status of the trip by "id" and "status".
@@ -35,8 +36,10 @@ public class TripStatusController {
                                              @RequestParam(value = "status") TripStatusCodeEnum status) {
         log.debug("REST request to set status {} for the Trip with id : {}", status, tripId);
 
-        Optional<Trip> trip = tripStatusService.updateTripStatus(tripId, status);
-        return trip.map(ResponseEntity::ok)
+        Optional<Trip> tripOptional = tripStatusService.updateTripStatus(tripId, status);
+        tripOptional.ifPresent(pushNotificationService::notifyTripStatusChanged);
+
+        return tripOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
