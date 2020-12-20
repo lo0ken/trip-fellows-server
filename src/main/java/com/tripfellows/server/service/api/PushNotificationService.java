@@ -11,7 +11,6 @@ public interface PushNotificationService {
      */
     void notifyTripCreated(Trip trip);
 
-
     /**
      * Notifying all passengers of the trip that trip status has been changed
      *

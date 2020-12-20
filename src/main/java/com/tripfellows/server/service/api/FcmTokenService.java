@@ -1,6 +1,16 @@
 package com.tripfellows.server.service.api;
 
+import java.util.List;
+
 public interface FcmTokenService {
+
+    /**
+     * Retrieving fcm tokens of specified accounts
+     *
+     * @param accountIds list with id of accounts to find fcm token
+     * @return list of fcm tokens
+     */
+    List<String> findByAccountIds(List<Integer> accountIds);
 
     /**
      * Create an association of specified account with fcm token

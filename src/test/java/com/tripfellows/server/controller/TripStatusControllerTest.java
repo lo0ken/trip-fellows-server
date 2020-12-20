@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.enums.TripStatusCodeEnum;
 import com.tripfellows.server.model.Trip;
+import com.tripfellows.server.service.api.PushNotificationService;
 import com.tripfellows.server.service.api.TripStatusService;
 import org.jeasy.random.EasyRandom;
 import org.junit.Before;
@@ -30,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TripStatusControllerTest {
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    PushNotificationService pushNotificationService;
 
     @MockBean
     TripStatusService tripStatusService;
@@ -62,6 +66,7 @@ class TripStatusControllerTest {
                 .andExpect(jsonPath("$.status.code").value(trip.getStatus().getCode().getValue()));
 
         verify(tripStatusService).updateTripStatus(trip.getId(), tripStatus);
+        verify(pushNotificationService).notifyTripStatusChanged(trip);
     }
 
     @Test
@@ -79,5 +84,6 @@ class TripStatusControllerTest {
                 .andExpect(jsonPath("$").doesNotExist());
 
         verify(tripStatusService).updateTripStatus(tripId, tripStatus);
+        verify(pushNotificationService, never()).notifyTripStatusChanged(any());
     }
 }

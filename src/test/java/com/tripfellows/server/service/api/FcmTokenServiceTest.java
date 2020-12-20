@@ -10,8 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
@@ -25,6 +29,39 @@ public class FcmTokenServiceTest {
     FcmTokenServiceImpl fcmTokenService;
 
     EasyRandom easyRandom = new EasyRandom();
+
+    @Test
+    public void findByAccountIdsTest() {
+        List<Integer> accountIds = easyRandom.objects(Integer.class, 10).collect(toList());
+
+        when(fcmTokenRepository.findById(any()))
+                .thenReturn(Optional.of(easyRandom.nextObject(AccountFcmToken.class)));
+
+        List<String> tokens = fcmTokenService.findByAccountIds(accountIds);
+
+        assertThat(tokens).hasSize(accountIds.size());
+    }
+
+    @Test
+    public void findByAccountIdsWhenTokenNotExistsTest() {
+        List<Integer> accountIds = easyRandom.objects(Integer.class, 10).collect(toList());
+
+        when(fcmTokenRepository.findById(any()))
+                .thenReturn(Optional.empty());
+
+        List<String> tokens = fcmTokenService.findByAccountIds(accountIds);
+
+        assertThat(tokens).hasSize(0);
+    }
+
+    @Test
+    public void findByAccountIdsWhenEmptyTest() {
+        List<Integer> accountIds = new ArrayList<>();
+
+        List<String> tokens = fcmTokenService.findByAccountIds(accountIds);
+
+        assertThat(tokens).hasSize(0);
+    }
 
     @Test
     public void updateWhenExistsTest() {

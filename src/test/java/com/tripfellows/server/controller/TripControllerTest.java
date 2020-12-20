@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tripfellows.server.model.Account;
 import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.security.SecurityService;
+import com.tripfellows.server.service.api.PushNotificationService;
 import com.tripfellows.server.service.api.TripAccountService;
 import com.tripfellows.server.service.api.TripService;
 import org.jeasy.random.EasyRandom;
@@ -48,6 +49,9 @@ public class TripControllerTest {
 
     @MockBean
     TripAccountService tripAccountService;
+
+    @MockBean
+    PushNotificationService pushNotificationService;
 
     EasyRandom easyRandom = new EasyRandom();
 
@@ -194,6 +198,8 @@ public class TripControllerTest {
                 .content(objectMapper.writeValueAsBytes(toCreate)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty());
+
+        verify(pushNotificationService).notifyTripCreated(created);
     }
 
     @Test
