@@ -1,7 +1,9 @@
 package com.tripfellows.server.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.tripfellows.server.model.Trip;
 import com.tripfellows.server.security.SecurityService;
+import com.tripfellows.server.service.api.PushNotificationService;
 import com.tripfellows.server.service.api.TripService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import static java.util.Objects.isNull;
 
@@ -27,6 +30,8 @@ public class TripController {
     private final SecurityService securityService;
 
     private final TripService tripService;
+
+    private final PushNotificationService pushNotificationService;
 
     /**
      * GET  /api/trips/:id : get the "id" trip.
@@ -122,6 +127,8 @@ public class TripController {
         trip.setCreator(securityService.getCurrentAccount());
 
         Trip result = tripService.create(trip);
+        pushNotificationService.notifyTripCreated(result);
+
         return ResponseEntity.created(new URI("/api/trips/" + result.getId()))
                 .body(result);
     }
